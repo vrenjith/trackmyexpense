@@ -37,6 +37,7 @@ public class TrackExpense extends MIDlet implements CommandListener {
     private Command screenCommand6;
     private Command screenCommand5;
     private Command screenCommand7;
+    private Command screenCommand8;
     private Form form;
     private TextField amount;
     private TextField details;
@@ -45,6 +46,12 @@ public class TrackExpense extends MIDlet implements CommandListener {
     private SimpleTableModel simpleTableModel;
     //</editor-fold>//GEN-END:|fields|0|
 
+    private void showMsg(String msg,String title, AlertType type)
+    {
+        Alert a = new Alert(title, msg, null, type);
+        a.setTimeout(Alert.FOREVER);
+        Display.getDisplay(this).setCurrent(a);
+    }
     /**
      * The HelloMIDlet constructor.
      */
@@ -152,70 +159,33 @@ public class TrackExpense extends MIDlet implements CommandListener {
                         rs.addRecord(expense.getBytes(),0,expense.length());
 
                         String appt = "Accounted " + getAmount().getString() + " under " + choiceGroup.getString(choiceGroup.getSelectedIndex());
-                        Alert a = new Alert("Information",appt,null,AlertType.INFO);
-                        a.setTimeout(Alert.FOREVER);
                         Display.getDisplay(this).setCurrentItem(amount);
-                        Display.getDisplay(this).setCurrent(a);
                         amount.setString("");
                         details.setString("");
                         rs.closeRecordStore();
+                        showMsg(appt,"Information",AlertType.INFO);
                     }
                 }
                 catch(Exception rse)
                 {
                     rse.printStackTrace();
-                    Alert a = new Alert("Can't write",rse.getMessage(),null,AlertType.ERROR);
-                    a.setTimeout(Alert.FOREVER);
-                    Display.getDisplay(this).setCurrent(a);
+                    showMsg(rse.getMessage(),"Can't write", AlertType.ERROR);
                 }
-            } else if (command == screenCommand) {//GEN-LINE:|7-commandAction|5|39-preAction
+            } else if (command == screenCommand4) {//GEN-LINE:|7-commandAction|5|67-preAction
                 // write pre-action user code here
-
-                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|6|39-postAction
-                // write post-action user code here
-                RecordStore rs = null;
-                try {
-                    list.deleteAll();
-                    if (null == rs) {
-                        rs = RecordStore.openRecordStore("MyExpenses", false);
-                    }
-                    RecordEnumeration re = rs.enumerateRecords(null, null, false);
-
-                    while (re.hasNextElement()) {
-                        list.append(new String(re.nextRecord()), null);
-                    }
-
-                } catch (Exception e) {
-                    Alert a = new Alert("Can't open datastore", e.getMessage(), null, AlertType.ERROR);
-                    a.setTimeout(Alert.FOREVER);
-                    Display.getDisplay(this).setCurrent(a);
-
-                }
-                if (null != rs) {
-                    try {
-                        rs.closeRecordStore();
-                    } catch (Exception e) {
-                    }
-                }
-            } else if (command == screenCommand4) {//GEN-LINE:|7-commandAction|7|67-preAction
-                // write pre-action user code here
-//GEN-LINE:|7-commandAction|8|67-postAction
+//GEN-LINE:|7-commandAction|6|67-postAction
                 // write post-action user code here
                 if (RecordStore.listRecordStores() != null) {
                     try {
                         RecordStore.deleteRecordStore("MyExpenses");
-                        Alert a = new Alert("Information", "Cleaned datastore", null, AlertType.INFO);
-                        a.setTimeout(Alert.FOREVER);
-                        Display.getDisplay(this).setCurrent(a);
+                        showMsg("Cleaned datastore","Information", AlertType.INFO);
                     } catch (Exception e) {
-                        Alert a = new Alert("Can't delete the datastore", e.getMessage(), null, AlertType.ERROR);
-                        a.setTimeout(Alert.FOREVER);
-                        Display.getDisplay(this).setCurrent(a);
+                        showMsg(e.getMessage(),"Can't delete the datastore", AlertType.ERROR);
                     }
                 }
-            } else if (command == screenCommand5) {//GEN-LINE:|7-commandAction|9|75-preAction
+            } else if (command == screenCommand5) {//GEN-LINE:|7-commandAction|7|75-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|10|75-postAction
+//GEN-LINE:|7-commandAction|8|75-postAction
                 // write post-action user code here
                 RecordStore rs = null;
                 try {
@@ -244,15 +214,9 @@ public class TrackExpense extends MIDlet implements CommandListener {
 
                     is.close();
                     fc.close();
-                    Alert a = new Alert("Information", "Exported as " + fileName, null, AlertType.INFO);
-                    a.setTimeout(Alert.FOREVER);
-                    Display.getDisplay(this).setCurrent(a);
-
+                    showMsg("Exported as " + fileName,"Information", AlertType.INFO);
                 } catch (Exception e) {
-                    Alert a = new Alert("Error", "Failed to export, " + e.getMessage(), null, AlertType.ERROR);
-                    a.setTimeout(Alert.FOREVER);
-                    Display.getDisplay(this).setCurrent(a);
-
+                    showMsg("Failed to export, " + e.getMessage(),"Error", AlertType.ERROR);
                 }
                 if (null != rs) {
                     try {
@@ -260,20 +224,9 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     } catch (Exception e) {
                     }
                 }
-            } else if (command == screenCommand6) {//GEN-LINE:|7-commandAction|11|78-preAction
+            } else if (command == screenCommand7) {//GEN-LINE:|7-commandAction|9|80-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|12|78-postAction
-                // write post-action user code here
-                 Alert a = new Alert("Information", "Developed by Renjith V [v.renjith@gmail.com]", null, AlertType.INFO);
-                 a.setTimeout(Alert.FOREVER);
-                 Display.getDisplay(this).setCurrent(a);
-            } else if (command == screenCommand7) {//GEN-LINE:|7-commandAction|13|80-preAction
-                // write pre-action user code here
-//GEN-LINE:|7-commandAction|14|80-postAction
-                // write post-action user code here
-                                // write pre-action user code here
-
-                switchDisplayable(null, getList());
+                switchDisplayable(null, getList());//GEN-LINE:|7-commandAction|10|80-postAction
                 // write post-action user code here
                 RecordStore rs = null;
                 try {
@@ -289,21 +242,16 @@ public class TrackExpense extends MIDlet implements CommandListener {
                         allElements[i] = new String(re.nextRecord());
                         if(++i >= 200)
                         {
-                            Alert a = new Alert("Too many records", "Displaying the last 200 entries", null, AlertType.WARNING);
-                            a.setTimeout(Alert.FOREVER);
-                            Display.getDisplay(this).setCurrent(a);
+                            showMsg("Displaying the last 200 entries. Tip: Export & Clean!","Too many records", AlertType.WARNING);
                             break;
                         }
                     }
-                    for (int j = i-1; j <=0 ; j--){
+                    for (int j = i-1; j >= 0 ; j--){
                         list.append(allElements[j], null);
                     }
 
                 } catch (Exception e) {
-                    Alert a = new Alert("Can't open datastore", e.getMessage(), null, AlertType.ERROR);
-                    a.setTimeout(Alert.FOREVER);
-                    Display.getDisplay(this).setCurrent(a);
-
+                    showMsg(e.getMessage(), "Can't open datastore",AlertType.ERROR);
                 }
                 if (null != rs) {
                     try {
@@ -311,21 +259,28 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     } catch (Exception e) {
                     }
                 }
-            }//GEN-BEGIN:|7-commandAction|15|58-preAction
+            } else if (command == screenCommand8) {//GEN-LINE:|7-commandAction|11|83-preAction
+                // write pre-action user code here
+//GEN-LINE:|7-commandAction|12|83-postAction
+                // write post-action user code here
+                showMsg("Developed by Renjith V [v.renjith@gmail.com]", "About",AlertType.INFO);
+            }//GEN-BEGIN:|7-commandAction|13|58-preAction
         } else if (displayable == list) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|15|58-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|13|58-preAction
                 // write pre-action user code here
-                listAction();//GEN-LINE:|7-commandAction|16|58-postAction
+                listAction();//GEN-LINE:|7-commandAction|14|58-postAction
                 // write post-action user code here
-            } else if (command == okCommand2) {//GEN-LINE:|7-commandAction|17|61-preAction
+            } else if (command == okCommand2) {//GEN-LINE:|7-commandAction|15|61-preAction
                 // write pre-action user code here
-                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|18|61-postAction
+                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|16|61-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|19|7-postCommandAction
-        }//GEN-END:|7-commandAction|19|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|17|7-postCommandAction
+        }//GEN-END:|7-commandAction|17|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|20|
-    //</editor-fold>//GEN-END:|7-commandAction|20|
+    }//GEN-BEGIN:|7-commandAction|18|
+    //</editor-fold>//GEN-END:|7-commandAction|18|
+
+
 
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
@@ -354,11 +309,10 @@ public class TrackExpense extends MIDlet implements CommandListener {
             form = new Form("TrackExpense", new Item[] { getAmount(), getDetails(), getChoiceGroup() });//GEN-BEGIN:|14-getter|1|14-postInit
             form.addCommand(getExitCommand());
             form.addCommand(getOkCommand());
-            form.addCommand(getScreenCommand());
             form.addCommand(getScreenCommand4());
             form.addCommand(getScreenCommand5());
-            form.addCommand(getScreenCommand6());
             form.addCommand(getScreenCommand7());
+            form.addCommand(getScreenCommand8());
             form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
             // write post-init user code here
         }//GEN-BEGIN:|14-getter|2|
@@ -638,12 +592,27 @@ public class TrackExpense extends MIDlet implements CommandListener {
     public Command getScreenCommand7() {
         if (screenCommand7 == null) {//GEN-END:|79-getter|0|79-preInit
             // write pre-init user code here
-            screenCommand7 = new Command("Under Test", Command.SCREEN, 0);//GEN-LINE:|79-getter|1|79-postInit
+            screenCommand7 = new Command("Show Expenses", Command.SCREEN, 0);//GEN-LINE:|79-getter|1|79-postInit
             // write post-init user code here
         }//GEN-BEGIN:|79-getter|2|
         return screenCommand7;
     }
     //</editor-fold>//GEN-END:|79-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: screenCommand8 ">//GEN-BEGIN:|82-getter|0|82-preInit
+    /**
+     * Returns an initiliazed instance of screenCommand8 component.
+     * @return the initialized component instance
+     */
+    public Command getScreenCommand8() {
+        if (screenCommand8 == null) {//GEN-END:|82-getter|0|82-preInit
+            // write pre-init user code here
+            screenCommand8 = new Command("About", Command.SCREEN, 0);//GEN-LINE:|82-getter|1|82-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|82-getter|2|
+        return screenCommand8;
+    }
+    //</editor-fold>//GEN-END:|82-getter|2|
 
 
 
