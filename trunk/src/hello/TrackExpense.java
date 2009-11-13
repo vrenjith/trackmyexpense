@@ -34,8 +34,8 @@ public class TrackExpense extends MIDlet implements CommandListener {
     private Command okCommand2;
     private Command screenCommand3;
     private Command screenCommand4;
-    private Command screenCommand5;
     private Command screenCommand6;
+    private Command screenCommand5;
     private Form form;
     private TextField amount;
     private TextField details;
@@ -179,11 +179,14 @@ public class TrackExpense extends MIDlet implements CommandListener {
                         rs = RecordStore.openRecordStore("MyExpenses", false);
                     }
                     RecordEnumeration re = rs.enumerateRecords(null, null, false);
-                    String allElements[];
+                    String[] allElements= new String[re.numRecords()];
 
+                    int i = 0;
                     while (re.hasNextElement()) {
-                        list.append(new String(re.nextRecord()), null);
-                        allElements
+                        allElements[i] = new String(re.nextRecord());
+                    }
+                    for (int j = allElements.length-1; j <=0; j--){
+                        list.append(allElements[j], null);
                     }
 
                 } catch (Exception e) {

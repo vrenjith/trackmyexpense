@@ -83,14 +83,14 @@
                     <Property name="longLabel" typeID="Pjava.lang.String" value="VClean Expenses"/>
                     <Property name="type" typeID="Pint" value="V1"/>
                 </Component>
-                <Component componentID="74" typeID="Cjavax.microedition.lcdui.Command">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VscreenCommand5"/>
-                    <Property name="label" typeID="Pjava.lang.String" value="VExport expenses"/>
-                    <Property name="type" typeID="Pint" value="V1"/>
-                </Component>
                 <Component componentID="77" typeID="Cjavax.microedition.lcdui.Command">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VscreenCommand6"/>
                     <Property name="label" typeID="Pjava.lang.String" value="VAbout"/>
+                    <Property name="type" typeID="Pint" value="V1"/>
+                </Component>
+                <Component componentID="74" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VscreenCommand5"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VExport expenses"/>
                     <Property name="type" typeID="Pint" value="V1"/>
                 </Component>
             </Component>
@@ -171,14 +171,14 @@
                         <Component componentID="71" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VLoan"/>
                         </Component>
+                        <Component componentID="76" typeID="C#ChoiceElement">
+                            <Property name="string" typeID="Pjava.lang.String" value="VVegetables"/>
+                        </Component>
                         <Component componentID="72" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VInvestment"/>
                         </Component>
                         <Component componentID="73" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VMovie/Entertainment"/>
-                        </Component>
-                        <Component componentID="76" typeID="C#ChoiceElement">
-                            <Property name="string" typeID="Pjava.lang.String" value="VVegetables"/>
                         </Component>
                     </Component>
                     <Component componentID="39" typeID="C#CommandEventSource">
@@ -194,13 +194,13 @@
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R66"/>
                     </Component>
-                    <Component componentID="75" typeID="C#CommandEventSource">
-                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
-                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R74"/>
-                    </Component>
                     <Component componentID="78" typeID="C#CommandEventSource">
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R77"/>
+                    </Component>
+                    <Component componentID="75" typeID="C#CommandEventSource">
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R74"/>
                     </Component>
                 </Component>
                 <Component componentID="56" typeID="Cjavax.microedition.lcdui.List">
@@ -238,8 +238,8 @@
         </Component>
     </Document>
     <FlowScene version="1">
-        <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
-        <Node componentID="14" descriptorID="componentNode14" x="278" y="162"/>
         <Node componentID="56" descriptorID="componentNode56" x="290" y="319"/>
+        <Node componentID="14" descriptorID="componentNode14" x="278" y="162"/>
+        <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
     </FlowScene>
 </VisualDesign>
