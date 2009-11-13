@@ -36,6 +36,7 @@ public class TrackExpense extends MIDlet implements CommandListener {
     private Command screenCommand4;
     private Command screenCommand6;
     private Command screenCommand5;
+    private Command screenCommand7;
     private Form form;
     private TextField amount;
     private TextField details;
@@ -179,15 +180,9 @@ public class TrackExpense extends MIDlet implements CommandListener {
                         rs = RecordStore.openRecordStore("MyExpenses", false);
                     }
                     RecordEnumeration re = rs.enumerateRecords(null, null, false);
-                    String[] allElements= new String[re.numRecords()];
 
-                    int i = 0;
                     while (re.hasNextElement()) {
-                        allElements[i] = new String(re.nextRecord());
-                        i++;
-                    }
-                    for (int j = allElements.length-1; j <=0; j--){
-                        list.append(allElements[j], null);
+                        list.append(new String(re.nextRecord()), null);
                     }
 
                 } catch (Exception e) {
@@ -272,21 +267,65 @@ public class TrackExpense extends MIDlet implements CommandListener {
                  Alert a = new Alert("Information", "Developed by Renjith V [v.renjith@gmail.com]", null, AlertType.INFO);
                  a.setTimeout(Alert.FOREVER);
                  Display.getDisplay(this).setCurrent(a);
-            }//GEN-BEGIN:|7-commandAction|13|58-preAction
+            } else if (command == screenCommand7) {//GEN-LINE:|7-commandAction|13|80-preAction
+                // write pre-action user code here
+//GEN-LINE:|7-commandAction|14|80-postAction
+                // write post-action user code here
+                                // write pre-action user code here
+
+                switchDisplayable(null, getList());
+                // write post-action user code here
+                RecordStore rs = null;
+                try {
+                    list.deleteAll();
+                    if (null == rs) {
+                        rs = RecordStore.openRecordStore("MyExpenses", false);
+                    }
+                    RecordEnumeration re = rs.enumerateRecords(null, null, false);
+                    String[] allElements= new String[200];
+
+                    int i = 0;
+                    while (re.hasNextElement()) {
+                        allElements[i] = new String(re.nextRecord());
+                        if(++i >= 200)
+                        {
+                            Alert a = new Alert("Too many records", "Displaying the last 200 entries", null, AlertType.WARNING);
+                            a.setTimeout(Alert.FOREVER);
+                            Display.getDisplay(this).setCurrent(a);
+                            break;
+                        }
+                    }
+                    for (int j = i-1; j <=0 ; j--){
+                        list.append(allElements[j], null);
+                    }
+
+                } catch (Exception e) {
+                    Alert a = new Alert("Can't open datastore", e.getMessage(), null, AlertType.ERROR);
+                    a.setTimeout(Alert.FOREVER);
+                    Display.getDisplay(this).setCurrent(a);
+
+                }
+                if (null != rs) {
+                    try {
+                        rs.closeRecordStore();
+                    } catch (Exception e) {
+                    }
+                }
+            }//GEN-BEGIN:|7-commandAction|15|58-preAction
         } else if (displayable == list) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|13|58-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|15|58-preAction
                 // write pre-action user code here
-                listAction();//GEN-LINE:|7-commandAction|14|58-postAction
+                listAction();//GEN-LINE:|7-commandAction|16|58-postAction
                 // write post-action user code here
-            } else if (command == okCommand2) {//GEN-LINE:|7-commandAction|15|61-preAction
+            } else if (command == okCommand2) {//GEN-LINE:|7-commandAction|17|61-preAction
                 // write pre-action user code here
-                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|16|61-postAction
+                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|18|61-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|17|7-postCommandAction
-        }//GEN-END:|7-commandAction|17|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|19|7-postCommandAction
+        }//GEN-END:|7-commandAction|19|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|18|
-    //</editor-fold>//GEN-END:|7-commandAction|18|
+    }//GEN-BEGIN:|7-commandAction|20|
+    //</editor-fold>//GEN-END:|7-commandAction|20|
 
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
@@ -319,6 +358,7 @@ public class TrackExpense extends MIDlet implements CommandListener {
             form.addCommand(getScreenCommand4());
             form.addCommand(getScreenCommand5());
             form.addCommand(getScreenCommand6());
+            form.addCommand(getScreenCommand7());
             form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
             // write post-init user code here
         }//GEN-BEGIN:|14-getter|2|
@@ -589,6 +629,21 @@ public class TrackExpense extends MIDlet implements CommandListener {
         return screenCommand6;
     }
     //</editor-fold>//GEN-END:|77-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: screenCommand7 ">//GEN-BEGIN:|79-getter|0|79-preInit
+    /**
+     * Returns an initiliazed instance of screenCommand7 component.
+     * @return the initialized component instance
+     */
+    public Command getScreenCommand7() {
+        if (screenCommand7 == null) {//GEN-END:|79-getter|0|79-preInit
+            // write pre-init user code here
+            screenCommand7 = new Command("Under Test", Command.SCREEN, 0);//GEN-LINE:|79-getter|1|79-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|79-getter|2|
+        return screenCommand7;
+    }
+    //</editor-fold>//GEN-END:|79-getter|2|
 
 
 

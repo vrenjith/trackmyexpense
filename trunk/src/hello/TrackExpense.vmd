@@ -93,11 +93,16 @@
                     <Property name="label" typeID="Pjava.lang.String" value="VExport expenses"/>
                     <Property name="type" typeID="Pint" value="V1"/>
                 </Component>
+                <Component componentID="79" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VscreenCommand7"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VUnder Test"/>
+                    <Property name="type" typeID="Pint" value="V1"/>
+                </Component>
             </Component>
             <Component componentID="10" typeID="C#DisplayablesCategory">
                 <Component componentID="14" typeID="Cjavax.microedition.lcdui.Form">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vform"/>
-                    <Property name="commands" typeID="1C#CommandEventSource" value="A6:3_R193_R273_R393_R673_R753_R78"/>
+                    <Property name="commands" typeID="1C#CommandEventSource" value="A7:3_R193_R273_R393_R673_R753_R783_R80"/>
                     <Property name="title" typeID="Pjava.lang.String" value="VTrackExpense"/>
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
                     <Property name="items" typeID="1Cjavax.microedition.lcdui.Item" value="A3:3_R223_R253_R29"/>
@@ -202,6 +207,10 @@
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R74"/>
                     </Component>
+                    <Component componentID="80" typeID="C#CommandEventSource">
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R79"/>
+                    </Component>
                 </Component>
                 <Component componentID="56" typeID="Cjavax.microedition.lcdui.List">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vlist"/>
@@ -239,7 +248,7 @@
     </Document>
     <FlowScene version="1">
         <Node componentID="14" descriptorID="componentNode14" x="278" y="162"/>
-        <Node componentID="56" descriptorID="componentNode56" x="290" y="319"/>
+        <Node componentID="56" descriptorID="componentNode56" x="566" y="245"/>
         <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
     </FlowScene>
 </VisualDesign>
