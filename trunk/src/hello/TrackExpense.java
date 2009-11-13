@@ -184,6 +184,7 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     int i = 0;
                     while (re.hasNextElement()) {
                         allElements[i] = new String(re.nextRecord());
+                        i++;
                     }
                     for (int j = allElements.length-1; j <=0; j--){
                         list.append(allElements[j], null);
