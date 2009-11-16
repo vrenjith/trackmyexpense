@@ -88,33 +88,48 @@
                     <Property name="priority" typeID="Pint" value="V0"/>
                     <Property name="ordinary" typeID="Pboolean" value="Vfalse"/>
                 </Component>
-                <Component componentID="107" typeID="C#WaitScreenSuccessCommand">
-                    <Property name="label" typeID="Pjava.lang.String" value="VSuccess"/>
-                    <Property name="type" typeID="Pint" value="V4"/>
-                    <Property name="priority" typeID="Pint" value="V0"/>
-                    <Property name="ordinary" typeID="Pboolean" value="Vfalse"/>
-                </Component>
                 <Component componentID="108" typeID="C#WaitScreenFailureCommand">
                     <Property name="label" typeID="Pjava.lang.String" value="VFailure"/>
                     <Property name="type" typeID="Pint" value="V4"/>
                     <Property name="priority" typeID="Pint" value="V0"/>
                     <Property name="ordinary" typeID="Pboolean" value="Vfalse"/>
                 </Component>
-                <Component componentID="112" typeID="Cjavax.microedition.lcdui.Command">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VexpenseDetailsCommand"/>
-                    <Property name="label" typeID="Pjava.lang.String" value="VExpense Details"/>
-                    <Property name="type" typeID="Pint" value="V1"/>
+                <Component componentID="107" typeID="C#WaitScreenSuccessCommand">
+                    <Property name="label" typeID="Pjava.lang.String" value="VSuccess"/>
+                    <Property name="type" typeID="Pint" value="V4"/>
+                    <Property name="priority" typeID="Pint" value="V0"/>
+                    <Property name="ordinary" typeID="Pboolean" value="Vfalse"/>
                 </Component>
                 <Component componentID="117" typeID="Cjavax.microedition.lcdui.Command">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VdeleteExpense"/>
                     <Property name="label" typeID="Pjava.lang.String" value="VDelete Expense"/>
                     <Property name="type" typeID="Pint" value="V1"/>
                 </Component>
+                <Component componentID="112" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VexpenseDetailsCommand"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VExpense Details"/>
+                    <Property name="type" typeID="Pint" value="V1"/>
+                </Component>
+                <Component componentID="141" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VdeleteCommand"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VDelete"/>
+                    <Property name="type" typeID="Pint" value="V4"/>
+                </Component>
+                <Component componentID="143" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VbackCommand"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VBack"/>
+                    <Property name="type" typeID="Pint" value="V2"/>
+                </Component>
+                <Component componentID="148" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VcheckUpdateCommand"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VScreen"/>
+                    <Property name="type" typeID="Pint" value="V1"/>
+                </Component>
             </Component>
             <Component componentID="10" typeID="C#DisplayablesCategory">
                 <Component componentID="14" typeID="Cjavax.microedition.lcdui.Form">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vform"/>
-                    <Property name="commands" typeID="1C#CommandEventSource" value="A7:3_R193_R274_R1133_R803_R673_R753_R83"/>
+                    <Property name="commands" typeID="1C#CommandEventSource" value="A8:3_R193_R274_R1133_R803_R673_R754_R1493_R83"/>
                     <Property name="title" typeID="Pjava.lang.String" value="VTrackExpense"/>
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
                     <Property name="items" typeID="1Cjavax.microedition.lcdui.Item" value="A4:3_R223_R253_R294_R104"/>
@@ -150,52 +165,71 @@
                         <Property name="label" typeID="Pjava.lang.String" value="VCategory"/>
                         <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
                         <Property name="choiceType" typeID="Pint" value="V4"/>
-                        <Property name="elements" typeID="1C#ChoiceElement" value="A15:3_R703_R303_R313_R763_R323_R693_R683_R353_R333_R343_R363_R713_R723_R733_R37"/>
+                        <Property name="elements" typeID="1C#ChoiceElement" value="A16:3_R703_R303_R313_R763_R323_R693_R683_R353_R333_R343_R363_R713_R723_R734_R1193_R37"/>
                         <Component componentID="31" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VGroceries"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R121"/>
                             <Property name="selected" typeID="Pboolean" value="Vtrue"/>
                         </Component>
                         <Component componentID="30" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VPetrol"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R135"/>
                         </Component>
                         <Component componentID="34" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VVehicle"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R128"/>
                         </Component>
                         <Component componentID="35" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VPhone/Water/Elec"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R126"/>
                         </Component>
                         <Component componentID="32" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VApparels"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R123"/>
                         </Component>
                         <Component componentID="33" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VChild/School"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R127"/>
                         </Component>
                         <Component componentID="36" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VHome Improvement"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R129"/>
                         </Component>
                         <Component componentID="37" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VOther"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R134"/>
                         </Component>
                         <Component componentID="68" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VMedical"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R125"/>
                         </Component>
                         <Component componentID="69" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VEat out"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R124"/>
                         </Component>
                         <Component componentID="70" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VTravel"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R120"/>
                         </Component>
                         <Component componentID="71" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VLoan"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R130"/>
                         </Component>
                         <Component componentID="76" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VVegetables"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R122"/>
                         </Component>
                         <Component componentID="72" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VInvestment"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R131"/>
                         </Component>
                         <Component componentID="73" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VMovie/Entertainment"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R132"/>
+                        </Component>
+                        <Component componentID="119" typeID="C#ChoiceElement">
+                            <Property name="string" typeID="Pjava.lang.String" value="VDonation/Offerings"/>
+                            <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R133"/>
                         </Component>
                     </Component>
                     <Component componentID="67" typeID="C#CommandEventSource">
@@ -240,6 +274,10 @@
                             <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R56"/>
                         </Component>
                     </Component>
+                    <Component componentID="149" typeID="C#CommandEventSource">
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R148"/>
+                    </Component>
                 </Component>
                 <Component componentID="56" typeID="Cjavax.microedition.lcdui.List">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VdetailExpList"/>
@@ -256,16 +294,17 @@
                         </Component>
                     </Component>
                     <Component componentID="61" typeID="C#CommandEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R62"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R56"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R60"/>
-                        <Component componentID="62" typeID="C#PreviousScreenEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R61"/>
-                        </Component>
                     </Component>
                     <Component componentID="118" typeID="C#CommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R145"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R56"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R117"/>
+                        <Component componentID="145" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R118"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R136"/>
+                        </Component>
                     </Component>
                 </Component>
                 <Component componentID="85" typeID="Cjavax.microedition.lcdui.List">
@@ -316,30 +355,135 @@
                     <Property name="title" typeID="Pjava.lang.String" value="VLoading..."/>
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
                     <Property name="task" typeID="Corg.netbeans.microedition.util.CancellableTask" value="R111"/>
-                    <Component componentID="109" typeID="C#WaitScreenSuccessCommandEventSource">
-                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R106"/>
-                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R107"/>
-                    </Component>
                     <Component componentID="110" typeID="C#WaitScreenFailureCommandEventSource">
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R106"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R108"/>
                     </Component>
+                    <Component componentID="109" typeID="C#WaitScreenSuccessCommandEventSource">
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R106"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R107"/>
+                    </Component>
+                </Component>
+                <Component componentID="136" typeID="Cjavax.microedition.lcdui.Alert">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VDelete"/>
+                    <Property name="commands" typeID="1C#CommandEventSource" value="A2:4_R1424_R144"/>
+                    <Property name="title" typeID="Pjava.lang.String" value="VConfirm Delete"/>
+                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
+                    <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R137"/>
+                    <Property name="string" typeID="Pjava.lang.String" value="VDelete the expense?"/>
+                    <Property name="timeout" typeID="Pint" value="V-2"/>
+                    <Property name="type" typeID="Ejavax.microedition.lcdui.AlertType" value="ECONFIRMATION"/>
+                    <Property name="indicator" typeID="Cjavax.microedition.lcdui.Gauge" value="R140"/>
+                    <Component componentID="140" typeID="Cjavax.microedition.lcdui.Gauge">
+                        <Property name="instanceName" typeID="Pjava.lang.String" value="Vindicator"/>
+                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
+                        <Property name="usedByAlert" typeID="Pboolean" value="Vtrue"/>
+                        <Property name="value" typeID="Pint" value="V50"/>
+                        <Property name="maxValue" typeID="Pint" value="V100"/>
+                    </Component>
+                    <Component componentID="142" typeID="C#CommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R147"/>
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R136"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R141"/>
+                        <Component componentID="147" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R142"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R56"/>
+                        </Component>
+                    </Component>
+                    <Component componentID="144" typeID="C#CommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R146"/>
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R136"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R143"/>
+                        <Component componentID="146" typeID="C#SwitchDisplayableEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R144"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R56"/>
+                        </Component>
+                    </Component>
                 </Component>
             </Component>
             <Component componentID="13" typeID="C#ResourcesCategory">
+                <Component componentID="129" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage9"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/home.png"/>
+                </Component>
+                <Component componentID="128" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage8"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/car.png"/>
+                </Component>
+                <Component componentID="131" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage11"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/investment.png"/>
+                </Component>
+                <Component componentID="130" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage10"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/loan.png"/>
+                </Component>
+                <Component componentID="133" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage13"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/church.png"/>
+                </Component>
+                <Component componentID="132" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage12"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/movie.png"/>
+                </Component>
+                <Component componentID="134" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage14"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/other.png"/>
+                </Component>
                 <Component componentID="111" typeID="Corg.netbeans.microedition.util.SimpleCancellableTask">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vtask"/>
+                </Component>
+                <Component componentID="127" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage7"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/child.png"/>
+                </Component>
+                <Component componentID="126" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage6"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/electricity.png"/>
+                </Component>
+                <Component componentID="125" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage5"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/medical1.png"/>
+                </Component>
+                <Component componentID="124" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage4"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/eatout.png"/>
+                </Component>
+                <Component componentID="123" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage3"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/apparels.png"/>
+                </Component>
+                <Component componentID="122" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage2"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/vegetable1.png"/>
+                </Component>
+                <Component componentID="121" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage1"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/groceries.png"/>
+                </Component>
+                <Component componentID="120" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/travel.png"/>
+                </Component>
+                <Component componentID="135" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage15"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/petrol.png"/>
+                </Component>
+                <Component componentID="137" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage16"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/delete.png"/>
                 </Component>
             </Component>
             <Component componentID="21" typeID="C#DatabindingCategory"/>
         </Component>
     </Document>
     <FlowScene version="1">
-        <Node componentID="91" descriptorID="componentNode91" x="116" y="433"/>
         <Node componentID="85" descriptorID="componentNode85" x="333" y="437"/>
         <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
+        <Node componentID="136" descriptorID="componentNode136" x="31" y="273"/>
         <Node componentID="56" descriptorID="componentNode56" x="509" y="191"/>
-        <Node componentID="106" descriptorID="componentNode106" x="106" y="540"/>
         <Node componentID="14" descriptorID="componentNode14" x="204" y="163"/>
+        <Node componentID="106" descriptorID="componentNode106" x="106" y="540"/>
+        <Node componentID="91" descriptorID="componentNode91" x="116" y="433"/>
     </FlowScene>
 </VisualDesign>

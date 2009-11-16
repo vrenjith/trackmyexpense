@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import javax.microedition.io.ConnectionNotFoundException;
 import javax.microedition.io.Connector;
 import javax.microedition.io.file.FileConnection;
 import javax.microedition.midlet.*;
@@ -31,7 +32,6 @@ public class TrackExpense extends MIDlet implements CommandListener {
     String deLimiter = "^";
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
-    private java.util.Hashtable __previousDisplayables = new java.util.Hashtable();
     private Command exitCommand;
     private Command addExpenseCommand;
     private Command okCommand;
@@ -41,8 +41,11 @@ public class TrackExpense extends MIDlet implements CommandListener {
     private Command aboutCommand;
     private Command returnCommand;
     private Command detailsExpensesCommand;
-    private Command expenseDetailsCommand;
     private Command deleteExpense;
+    private Command expenseDetailsCommand;
+    private Command deleteCommand;
+    private Command backCommand;
+    private Command checkUpdateCommand;
     private Form form;
     private TextField amount;
     private TextField details;
@@ -52,7 +55,26 @@ public class TrackExpense extends MIDlet implements CommandListener {
     private List expSumList;
     private Alert About;
     private WaitScreen waitScreen;
+    private Alert Delete;
+    private Gauge indicator;
+    private Image image9;
+    private Image image8;
+    private Image image11;
+    private Image image10;
+    private Image image13;
+    private Image image12;
+    private Image image14;
     private SimpleCancellableTask task;
+    private Image image7;
+    private Image image6;
+    private Image image5;
+    private Image image4;
+    private Image image3;
+    private Image image2;
+    private Image image1;
+    private Image image;
+    private Image image15;
+    private Image image16;
     //</editor-fold>//GEN-END:|fields|0|
 
     private void showMsg(String msg,String title, AlertType type)
@@ -68,19 +90,6 @@ public class TrackExpense extends MIDlet implements CommandListener {
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
-    /**
-     * Switches a display to previous displayable of the current displayable.
-     * The <code>display</code> instance is obtain from the <code>getDisplay</code> method.
-     */
-    private void switchToPreviousDisplayable() {
-        Displayable __currentDisplayable = getDisplay().getCurrent();
-        if (__currentDisplayable != null) {
-            Displayable __nextDisplayable = (Displayable) __previousDisplayables.get(__currentDisplayable);
-            if (__nextDisplayable != null) {
-                switchDisplayable(null, __nextDisplayable);
-            }
-        }
-    }
     //</editor-fold>//GEN-END:|methods|0|
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Method: initialize ">//GEN-BEGIN:|0-initialize|0|0-preInitialize
@@ -126,10 +135,6 @@ public class TrackExpense extends MIDlet implements CommandListener {
     public void switchDisplayable(Alert alert, Displayable nextDisplayable) {//GEN-END:|5-switchDisplayable|0|5-preSwitch
         // write pre-switch user code here
         Display display = getDisplay();//GEN-BEGIN:|5-switchDisplayable|1|5-postSwitch
-        Displayable __currentDisplayable = display.getCurrent();
-        if (__currentDisplayable != null  &&  nextDisplayable != null) {
-            __previousDisplayables.put(nextDisplayable, __currentDisplayable);
-        }
         if (alert == null) {
             display.setCurrent(nextDisplayable);
         } else {
@@ -147,56 +152,79 @@ public class TrackExpense extends MIDlet implements CommandListener {
      */
     public void commandAction(Command command, Displayable displayable) {//GEN-END:|7-commandAction|0|7-preCommandAction
         // write pre-action user code here
-        if (displayable == detailExpList) {//GEN-BEGIN:|7-commandAction|1|58-preAction
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|1|58-preAction
+        if (displayable == Delete) {//GEN-BEGIN:|7-commandAction|1|144-preAction
+            if (command == backCommand) {//GEN-END:|7-commandAction|1|144-preAction
                 // write pre-action user code here
-                detailExpListAction();//GEN-LINE:|7-commandAction|2|58-postAction
+                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|2|144-postAction
                 // write post-action user code here
-            } else if (command == deleteExpense) {//GEN-LINE:|7-commandAction|3|118-preAction
+            } else if (command == deleteCommand) {//GEN-LINE:|7-commandAction|3|142-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|4|118-postAction
+                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|4|142-postAction
                 // write post-action user code here
                 try {
-                    RecordStore rs = RecordStore.openRecordStore("MyExpenses", false);
                     int nIndex = getDetailExpList().getSelectedIndex();
-                    int nRecIndex = currIndices[nIndex];
-                    rs.deleteRecord(nRecIndex);
-                    rs.closeRecordStore();
-                    fillExpensesDetails(currFilter);
+                    if (nIndex >= 0) {
+                        RecordStore rs = RecordStore.openRecordStore("MyExpenses", true);
+                        int nRecIndex = currIndices[nIndex];
+                        rs.deleteRecord(nRecIndex);
+                        rs.closeRecordStore();
+                        fillExpensesDetails(currFilter);
+                    }
                 } catch (Exception ex) {
-                    showMsg("Unable to delete", "Error",AlertType.ERROR);
+                    //showMsg("Unable to delete", "Error", AlertType.ERROR);
                 }
-                fillExpensesDetails(currFilter);
-            } else if (command == okCommand) {//GEN-LINE:|7-commandAction|5|61-preAction
+            }//GEN-BEGIN:|7-commandAction|5|58-preAction
+        } else if (displayable == detailExpList) {
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|5|58-preAction
                 // write pre-action user code here
-                switchToPreviousDisplayable();//GEN-LINE:|7-commandAction|6|61-postAction
+                detailExpListAction();//GEN-LINE:|7-commandAction|6|58-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|7|86-preAction
+            } else if (command == deleteExpense) {//GEN-LINE:|7-commandAction|7|118-preAction
+                // write pre-action user code here
+                int nIndex = getExpSumList().getSelectedIndex();
+                if (nIndex >= 0) {
+                    switchDisplayable(null, getDelete());//GEN-LINE:|7-commandAction|8|118-postAction
+                    // write post-action user code here
+                }
+            } else if (command == okCommand) {//GEN-LINE:|7-commandAction|9|61-preAction
+                // write pre-action user code here
+//GEN-LINE:|7-commandAction|10|61-postAction
+                // write post-action user code here
+                if(currFilter.equalsIgnoreCase("")) {
+                    switchDisplayable(null, getForm());
+                }
+                else {
+                    fillExpenseSummary();
+                    switchDisplayable(null, getExpSumList());
+                }
+            }//GEN-BEGIN:|7-commandAction|11|86-preAction
         } else if (displayable == expSumList) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|7|86-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|11|86-preAction
                 // write pre-action user code here
-                expSumListAction();//GEN-LINE:|7-commandAction|8|86-postAction
+                expSumListAction();//GEN-LINE:|7-commandAction|12|86-postAction
                 // write post-action user code here
-            } else if (command == detailsExpensesCommand) {//GEN-LINE:|7-commandAction|9|89-preAction
+            } else if (command == detailsExpensesCommand) {//GEN-LINE:|7-commandAction|13|89-preAction
+                int nIndex = getExpSumList().getSelectedIndex();
+                if (nIndex >= 0) {                // write pre-action user code here
+                    switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|14|89-postAction
+                    // write post-action user code here
+                    String currEntry = getExpSumList().getString(nIndex);
+                    String cols[] = split(currEntry, ":");
+                    fillExpensesDetails(cols[0]);
+                }
+            } else if (command == returnCommand) {//GEN-LINE:|7-commandAction|15|96-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|10|89-postAction
+                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|16|96-postAction
                 // write post-action user code here
-                String currEntry = getExpSumList().getString(getExpSumList().getSelectedIndex());
-                String cols[] = split(currEntry, ":");
-                fillExpensesDetails(cols[0]);
-            } else if (command == returnCommand) {//GEN-LINE:|7-commandAction|11|96-preAction
-                // write pre-action user code here
-                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|12|96-postAction
-                // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|13|83-preAction
+            }//GEN-BEGIN:|7-commandAction|17|83-preAction
         } else if (displayable == form) {
-            if (command == aboutCommand) {//GEN-END:|7-commandAction|13|83-preAction
+            if (command == aboutCommand) {//GEN-END:|7-commandAction|17|83-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|14|83-postAction
+                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|18|83-postAction
                 // write post-action user code here
-            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|15|27-preAction
+            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|19|27-preAction
                     // write pre-action user code here
-//GEN-LINE:|7-commandAction|16|27-postAction
+//GEN-LINE:|7-commandAction|20|27-postAction
                 try
                 {
                     if(0 != getAmount().getString().length())
@@ -226,9 +254,19 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     rse.printStackTrace();
                     showMsg("Can't write","Error", AlertType.ERROR);
                 }
-            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|17|67-preAction
+            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|21|149-preAction
+
+                    // write pre-action user code here
+//GEN-LINE:|7-commandAction|22|149-postAction
+                // write post-action user code here
+                try
+                {
+                platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
+                }
+                catch(Exception e){}
+            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|23|67-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|18|67-postAction
+//GEN-LINE:|7-commandAction|24|67-postAction
                 // write post-action user code here
                 if (RecordStore.listRecordStores() != null) {
                     try {
@@ -238,23 +276,23 @@ public class TrackExpense extends MIDlet implements CommandListener {
                         showMsg("Can't delete the datastore","Error", AlertType.ERROR);
                     }
                 }
-            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|19|19-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|25|19-preAction
                 // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|20|19-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|26|19-postAction
                 // write post-action user code here
-            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|21|113-preAction
+            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|27|113-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|22|113-postAction
+                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|28|113-postAction
                 // write post-action user code here
                 fillExpensesDetails("");
-            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|23|80-preAction
+            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|29|80-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|24|80-postAction
+                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|30|80-postAction
                 // write post-action user code here
                 fillExpenseSummary();
-            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|25|75-preAction
+            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|31|75-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|26|75-postAction
+//GEN-LINE:|7-commandAction|32|75-postAction
                 // write post-action user code here
                 RecordStore rs = null;
                 try {
@@ -272,7 +310,14 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     }
                     OutputStream is = fc.openOutputStream();
 
-                    rs = RecordStore.openRecordStore("MyExpenses", false);
+                    rs = RecordStore.openRecordStore("MyExpenses", true);
+                    if (0 == rs.getNumRecords()) {
+                        showMsg("No records found", "Information", AlertType.INFO);
+                        if (null != rs) {
+                            rs.closeRecordStore();
+                        }
+                        return;
+                    }
                     RecordEnumeration re = rs.enumerateRecords(null, null, false);
 
                     is.write(("Date,Amount,Description,Category\n").getBytes());
@@ -293,21 +338,21 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     } catch (Exception e) {
                     }
                 }
-            }//GEN-BEGIN:|7-commandAction|27|110-preAction
+            }//GEN-BEGIN:|7-commandAction|33|110-preAction
         } else if (displayable == waitScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|27|110-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|33|110-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|28|110-postAction
+//GEN-LINE:|7-commandAction|34|110-postAction
                 // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|29|109-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|35|109-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|30|109-postAction
+//GEN-LINE:|7-commandAction|36|109-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|31|7-postCommandAction
-        }//GEN-END:|7-commandAction|31|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|37|7-postCommandAction
+        }//GEN-END:|7-commandAction|37|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|32|
-    //</editor-fold>//GEN-END:|7-commandAction|32|
+    }//GEN-BEGIN:|7-commandAction|38|
+    //</editor-fold>//GEN-END:|7-commandAction|38|
 
 
 
@@ -342,6 +387,7 @@ public class TrackExpense extends MIDlet implements CommandListener {
             form.addCommand(getExpensesummaryCommand());
             form.addCommand(getCleanExpensesCommand());
             form.addCommand(getExportExpensesCommand());
+            form.addCommand(getCheckUpdateCommand());
             form.addCommand(getAboutCommand());
             form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
             // write post-init user code here
@@ -408,22 +454,23 @@ public class TrackExpense extends MIDlet implements CommandListener {
         if (choiceGroup == null) {//GEN-END:|29-getter|0|29-preInit
             // write pre-init user code here
             choiceGroup = new ChoiceGroup("Category", Choice.POPUP);//GEN-BEGIN:|29-getter|1|29-postInit
-            choiceGroup.append("Travel", null);
-            choiceGroup.append("Petrol", null);
-            choiceGroup.append("Groceries", null);
-            choiceGroup.append("Vegetables", null);
-            choiceGroup.append("Apparels", null);
-            choiceGroup.append("Eat out", null);
-            choiceGroup.append("Medical", null);
-            choiceGroup.append("Phone/Water/Elec", null);
-            choiceGroup.append("Child/School", null);
-            choiceGroup.append("Vehicle", null);
-            choiceGroup.append("Home Improvement", null);
-            choiceGroup.append("Loan", null);
-            choiceGroup.append("Investment", null);
-            choiceGroup.append("Movie/Entertainment", null);
-            choiceGroup.append("Other", null);
-            choiceGroup.setSelectedFlags(new boolean[] { false, false, true, false, false, false, false, false, false, false, false, false, false, false, false });//GEN-END:|29-getter|1|29-postInit
+            choiceGroup.append("Travel", getImage());
+            choiceGroup.append("Petrol", getImage15());
+            choiceGroup.append("Groceries", getImage1());
+            choiceGroup.append("Vegetables", getImage2());
+            choiceGroup.append("Apparels", getImage3());
+            choiceGroup.append("Eat out", getImage4());
+            choiceGroup.append("Medical", getImage5());
+            choiceGroup.append("Phone/Water/Elec", getImage6());
+            choiceGroup.append("Child/School", getImage7());
+            choiceGroup.append("Vehicle", getImage8());
+            choiceGroup.append("Home Improvement", getImage9());
+            choiceGroup.append("Loan", getImage10());
+            choiceGroup.append("Investment", getImage11());
+            choiceGroup.append("Movie/Entertainment", getImage12());
+            choiceGroup.append("Donation/Offerings", getImage13());
+            choiceGroup.append("Other", getImage14());
+            choiceGroup.setSelectedFlags(new boolean[] { false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false });//GEN-END:|29-getter|1|29-postInit
             // write post-init user code here
         }//GEN-BEGIN:|29-getter|2|
         return choiceGroup;
@@ -496,7 +543,16 @@ public class TrackExpense extends MIDlet implements CommandListener {
         try {
             expSumList.deleteAll();
             if (null == rs) {
-                rs = RecordStore.openRecordStore("MyExpenses", false);
+                rs = RecordStore.openRecordStore("MyExpenses", true);
+            }
+            if(0 == rs.getNumRecords())
+            {
+                //showMsg("No records found", "Information", AlertType.INFO);
+                if(null != rs)
+                {
+                    rs.closeRecordStore();
+                }
+                return;
             }
             RecordEnumeration re = rs.enumerateRecords(null, null, false);
             while (re.hasNextElement()) {
@@ -522,7 +578,7 @@ public class TrackExpense extends MIDlet implements CommandListener {
             }
 
         } catch (Exception e) {
-            showMsg("Can't open datastore", "Error", AlertType.ERROR);
+            //showMsg("Can't open datastore", "Error", AlertType.ERROR);
         }
         if (null != rs) {
             try {
@@ -540,7 +596,16 @@ public class TrackExpense extends MIDlet implements CommandListener {
         try {
             detailExpList.deleteAll();
             if (null == rs) {
-                rs = RecordStore.openRecordStore("MyExpenses", false);
+                rs = RecordStore.openRecordStore("MyExpenses", true);
+            }
+            if(0 == rs.getNumRecords())
+            {
+                //showMsg("No records found", "Information", AlertType.INFO);
+                if(null != rs)
+                {
+                    rs.closeRecordStore();
+                }
+                return;
             }
             RecordEnumeration re = rs.enumerateRecords(null, null, false);
 
@@ -571,10 +636,10 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     break;
                 }
             }
-            getDetailExpList().setSelectedIndex(0, true);
+            //getDetailExpList().setSelectedIndex(0, true);
             
         } catch (Exception e) {
-            showMsg("Can't open datastore", "Error", AlertType.ERROR);
+            //showMsg("Can't open datastore", "Error", AlertType.ERROR);
         }
         if (null != rs) {
             try {
@@ -819,6 +884,411 @@ public class TrackExpense extends MIDlet implements CommandListener {
         return deleteExpense;
     }
     //</editor-fold>//GEN-END:|117-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image ">//GEN-BEGIN:|120-getter|0|120-preInit
+    /**
+     * Returns an initiliazed instance of image component.
+     * @return the initialized component instance
+     */
+    public Image getImage() {
+        if (image == null) {//GEN-END:|120-getter|0|120-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|120-getter|1|120-@java.io.IOException
+                image = Image.createImage("/images/travel.png");
+            } catch (java.io.IOException e) {//GEN-END:|120-getter|1|120-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|120-getter|2|120-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|120-getter|3|
+        return image;
+    }
+    //</editor-fold>//GEN-END:|120-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image1 ">//GEN-BEGIN:|121-getter|0|121-preInit
+    /**
+     * Returns an initiliazed instance of image1 component.
+     * @return the initialized component instance
+     */
+    public Image getImage1() {
+        if (image1 == null) {//GEN-END:|121-getter|0|121-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|121-getter|1|121-@java.io.IOException
+                image1 = Image.createImage("/images/groceries.png");
+            } catch (java.io.IOException e) {//GEN-END:|121-getter|1|121-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|121-getter|2|121-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|121-getter|3|
+        return image1;
+    }
+    //</editor-fold>//GEN-END:|121-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image2 ">//GEN-BEGIN:|122-getter|0|122-preInit
+    /**
+     * Returns an initiliazed instance of image2 component.
+     * @return the initialized component instance
+     */
+    public Image getImage2() {
+        if (image2 == null) {//GEN-END:|122-getter|0|122-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|122-getter|1|122-@java.io.IOException
+                image2 = Image.createImage("/images/vegetable1.png");
+            } catch (java.io.IOException e) {//GEN-END:|122-getter|1|122-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|122-getter|2|122-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|122-getter|3|
+        return image2;
+    }
+    //</editor-fold>//GEN-END:|122-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image3 ">//GEN-BEGIN:|123-getter|0|123-preInit
+    /**
+     * Returns an initiliazed instance of image3 component.
+     * @return the initialized component instance
+     */
+    public Image getImage3() {
+        if (image3 == null) {//GEN-END:|123-getter|0|123-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|123-getter|1|123-@java.io.IOException
+                image3 = Image.createImage("/images/apparels.png");
+            } catch (java.io.IOException e) {//GEN-END:|123-getter|1|123-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|123-getter|2|123-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|123-getter|3|
+        return image3;
+    }
+    //</editor-fold>//GEN-END:|123-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image4 ">//GEN-BEGIN:|124-getter|0|124-preInit
+    /**
+     * Returns an initiliazed instance of image4 component.
+     * @return the initialized component instance
+     */
+    public Image getImage4() {
+        if (image4 == null) {//GEN-END:|124-getter|0|124-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|124-getter|1|124-@java.io.IOException
+                image4 = Image.createImage("/images/eatout.png");
+            } catch (java.io.IOException e) {//GEN-END:|124-getter|1|124-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|124-getter|2|124-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|124-getter|3|
+        return image4;
+    }
+    //</editor-fold>//GEN-END:|124-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image5 ">//GEN-BEGIN:|125-getter|0|125-preInit
+    /**
+     * Returns an initiliazed instance of image5 component.
+     * @return the initialized component instance
+     */
+    public Image getImage5() {
+        if (image5 == null) {//GEN-END:|125-getter|0|125-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|125-getter|1|125-@java.io.IOException
+                image5 = Image.createImage("/images/medical1.png");
+            } catch (java.io.IOException e) {//GEN-END:|125-getter|1|125-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|125-getter|2|125-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|125-getter|3|
+        return image5;
+    }
+    //</editor-fold>//GEN-END:|125-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image6 ">//GEN-BEGIN:|126-getter|0|126-preInit
+    /**
+     * Returns an initiliazed instance of image6 component.
+     * @return the initialized component instance
+     */
+    public Image getImage6() {
+        if (image6 == null) {//GEN-END:|126-getter|0|126-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|126-getter|1|126-@java.io.IOException
+                image6 = Image.createImage("/images/electricity.png");
+            } catch (java.io.IOException e) {//GEN-END:|126-getter|1|126-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|126-getter|2|126-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|126-getter|3|
+        return image6;
+    }
+    //</editor-fold>//GEN-END:|126-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image7 ">//GEN-BEGIN:|127-getter|0|127-preInit
+    /**
+     * Returns an initiliazed instance of image7 component.
+     * @return the initialized component instance
+     */
+    public Image getImage7() {
+        if (image7 == null) {//GEN-END:|127-getter|0|127-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|127-getter|1|127-@java.io.IOException
+                image7 = Image.createImage("/images/child.png");
+            } catch (java.io.IOException e) {//GEN-END:|127-getter|1|127-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|127-getter|2|127-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|127-getter|3|
+        return image7;
+    }
+    //</editor-fold>//GEN-END:|127-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image8 ">//GEN-BEGIN:|128-getter|0|128-preInit
+    /**
+     * Returns an initiliazed instance of image8 component.
+     * @return the initialized component instance
+     */
+    public Image getImage8() {
+        if (image8 == null) {//GEN-END:|128-getter|0|128-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|128-getter|1|128-@java.io.IOException
+                image8 = Image.createImage("/images/car.png");
+            } catch (java.io.IOException e) {//GEN-END:|128-getter|1|128-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|128-getter|2|128-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|128-getter|3|
+        return image8;
+    }
+    //</editor-fold>//GEN-END:|128-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image9 ">//GEN-BEGIN:|129-getter|0|129-preInit
+    /**
+     * Returns an initiliazed instance of image9 component.
+     * @return the initialized component instance
+     */
+    public Image getImage9() {
+        if (image9 == null) {//GEN-END:|129-getter|0|129-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|129-getter|1|129-@java.io.IOException
+                image9 = Image.createImage("/images/home.png");
+            } catch (java.io.IOException e) {//GEN-END:|129-getter|1|129-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|129-getter|2|129-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|129-getter|3|
+        return image9;
+    }
+    //</editor-fold>//GEN-END:|129-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image10 ">//GEN-BEGIN:|130-getter|0|130-preInit
+    /**
+     * Returns an initiliazed instance of image10 component.
+     * @return the initialized component instance
+     */
+    public Image getImage10() {
+        if (image10 == null) {//GEN-END:|130-getter|0|130-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|130-getter|1|130-@java.io.IOException
+                image10 = Image.createImage("/images/loan.png");
+            } catch (java.io.IOException e) {//GEN-END:|130-getter|1|130-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|130-getter|2|130-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|130-getter|3|
+        return image10;
+    }
+    //</editor-fold>//GEN-END:|130-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image11 ">//GEN-BEGIN:|131-getter|0|131-preInit
+    /**
+     * Returns an initiliazed instance of image11 component.
+     * @return the initialized component instance
+     */
+    public Image getImage11() {
+        if (image11 == null) {//GEN-END:|131-getter|0|131-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|131-getter|1|131-@java.io.IOException
+                image11 = Image.createImage("/images/investment.png");
+            } catch (java.io.IOException e) {//GEN-END:|131-getter|1|131-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|131-getter|2|131-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|131-getter|3|
+        return image11;
+    }
+    //</editor-fold>//GEN-END:|131-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image12 ">//GEN-BEGIN:|132-getter|0|132-preInit
+    /**
+     * Returns an initiliazed instance of image12 component.
+     * @return the initialized component instance
+     */
+    public Image getImage12() {
+        if (image12 == null) {//GEN-END:|132-getter|0|132-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|132-getter|1|132-@java.io.IOException
+                image12 = Image.createImage("/images/movie.png");
+            } catch (java.io.IOException e) {//GEN-END:|132-getter|1|132-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|132-getter|2|132-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|132-getter|3|
+        return image12;
+    }
+    //</editor-fold>//GEN-END:|132-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image13 ">//GEN-BEGIN:|133-getter|0|133-preInit
+    /**
+     * Returns an initiliazed instance of image13 component.
+     * @return the initialized component instance
+     */
+    public Image getImage13() {
+        if (image13 == null) {//GEN-END:|133-getter|0|133-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|133-getter|1|133-@java.io.IOException
+                image13 = Image.createImage("/images/church.png");
+            } catch (java.io.IOException e) {//GEN-END:|133-getter|1|133-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|133-getter|2|133-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|133-getter|3|
+        return image13;
+    }
+    //</editor-fold>//GEN-END:|133-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image14 ">//GEN-BEGIN:|134-getter|0|134-preInit
+    /**
+     * Returns an initiliazed instance of image14 component.
+     * @return the initialized component instance
+     */
+    public Image getImage14() {
+        if (image14 == null) {//GEN-END:|134-getter|0|134-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|134-getter|1|134-@java.io.IOException
+                image14 = Image.createImage("/images/other.png");
+            } catch (java.io.IOException e) {//GEN-END:|134-getter|1|134-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|134-getter|2|134-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|134-getter|3|
+        return image14;
+    }
+    //</editor-fold>//GEN-END:|134-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image15 ">//GEN-BEGIN:|135-getter|0|135-preInit
+    /**
+     * Returns an initiliazed instance of image15 component.
+     * @return the initialized component instance
+     */
+    public Image getImage15() {
+        if (image15 == null) {//GEN-END:|135-getter|0|135-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|135-getter|1|135-@java.io.IOException
+                image15 = Image.createImage("/images/petrol.png");
+            } catch (java.io.IOException e) {//GEN-END:|135-getter|1|135-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|135-getter|2|135-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|135-getter|3|
+        return image15;
+    }
+    //</editor-fold>//GEN-END:|135-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: Delete ">//GEN-BEGIN:|136-getter|0|136-preInit
+    /**
+     * Returns an initiliazed instance of Delete component.
+     * @return the initialized component instance
+     */
+    public Alert getDelete() {
+        if (Delete == null) {//GEN-END:|136-getter|0|136-preInit
+            // write pre-init user code here
+            Delete = new Alert("Confirm Delete", "Delete the expense?", getImage16(), AlertType.CONFIRMATION);//GEN-BEGIN:|136-getter|1|136-postInit
+            Delete.addCommand(getDeleteCommand());
+            Delete.addCommand(getBackCommand());
+            Delete.setCommandListener(this);
+            Delete.setIndicator(getIndicator());
+            Delete.setTimeout(Alert.FOREVER);//GEN-END:|136-getter|1|136-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|136-getter|2|
+        return Delete;
+    }
+    //</editor-fold>//GEN-END:|136-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image16 ">//GEN-BEGIN:|137-getter|0|137-preInit
+    /**
+     * Returns an initiliazed instance of image16 component.
+     * @return the initialized component instance
+     */
+    public Image getImage16() {
+        if (image16 == null) {//GEN-END:|137-getter|0|137-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|137-getter|1|137-@java.io.IOException
+                image16 = Image.createImage("/images/delete.png");
+            } catch (java.io.IOException e) {//GEN-END:|137-getter|1|137-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|137-getter|2|137-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|137-getter|3|
+        return image16;
+    }
+    //</editor-fold>//GEN-END:|137-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: deleteCommand ">//GEN-BEGIN:|141-getter|0|141-preInit
+    /**
+     * Returns an initiliazed instance of deleteCommand component.
+     * @return the initialized component instance
+     */
+    public Command getDeleteCommand() {
+        if (deleteCommand == null) {//GEN-END:|141-getter|0|141-preInit
+            // write pre-init user code here
+            deleteCommand = new Command("Delete", Command.OK, 0);//GEN-LINE:|141-getter|1|141-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|141-getter|2|
+        return deleteCommand;
+    }
+    //</editor-fold>//GEN-END:|141-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: backCommand ">//GEN-BEGIN:|143-getter|0|143-preInit
+    /**
+     * Returns an initiliazed instance of backCommand component.
+     * @return the initialized component instance
+     */
+    public Command getBackCommand() {
+        if (backCommand == null) {//GEN-END:|143-getter|0|143-preInit
+            // write pre-init user code here
+            backCommand = new Command("Back", Command.BACK, 0);//GEN-LINE:|143-getter|1|143-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|143-getter|2|
+        return backCommand;
+    }
+    //</editor-fold>//GEN-END:|143-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: indicator ">//GEN-BEGIN:|140-getter|0|140-preInit
+    /**
+     * Returns an initiliazed instance of indicator component.
+     * @return the initialized component instance
+     */
+    public Gauge getIndicator() {
+        if (indicator == null) {//GEN-END:|140-getter|0|140-preInit
+            // write pre-init user code here
+            indicator = new Gauge(null, false, 100, 50);//GEN-LINE:|140-getter|1|140-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|140-getter|2|
+        return indicator;
+    }
+    //</editor-fold>//GEN-END:|140-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: checkUpdateCommand ">//GEN-BEGIN:|148-getter|0|148-preInit
+    /**
+     * Returns an initiliazed instance of checkUpdateCommand component.
+     * @return the initialized component instance
+     */
+    public Command getCheckUpdateCommand() {
+        if (checkUpdateCommand == null) {//GEN-END:|148-getter|0|148-preInit
+            // write pre-init user code here
+            checkUpdateCommand = new Command("Screen", Command.SCREEN, 0);//GEN-LINE:|148-getter|1|148-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|148-getter|2|
+        return checkUpdateCommand;
+    }
+    //</editor-fold>//GEN-END:|148-getter|2|
+
+
 
 
 
