@@ -5,14 +5,14 @@
 
 package main;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
-import javax.microedition.io.ConnectionNotFoundException;
-import javax.microedition.io.Connector;
+import javax.microedition.io.*;
 import javax.microedition.io.file.FileConnection;
 import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
@@ -24,7 +24,7 @@ import org.netbeans.microedition.util.SimpleCancellableTask;
 /**
  * @author Z000DG8C
  */
-public class TrackExpense extends MIDlet implements CommandListener {
+public class TrackExpense extends MIDlet implements CommandListener,ItemStateListener {
 
     private boolean midletPaused = false;
     private String currFilter = "";
@@ -57,13 +57,6 @@ public class TrackExpense extends MIDlet implements CommandListener {
     private WaitScreen waitScreen;
     private Alert Delete;
     private Gauge indicator;
-    private Image image9;
-    private Image image8;
-    private Image image11;
-    private Image image10;
-    private Image image13;
-    private Image image12;
-    private Image image14;
     private SimpleCancellableTask task;
     private Image image7;
     private Image image6;
@@ -73,8 +66,15 @@ public class TrackExpense extends MIDlet implements CommandListener {
     private Image image2;
     private Image image1;
     private Image image;
-    private Image image15;
     private Image image16;
+    private Image image9;
+    private Image image8;
+    private Image image11;
+    private Image image10;
+    private Image image13;
+    private Image image12;
+    private Image image15;
+    private Image image14;
     //</editor-fold>//GEN-END:|fields|0|
 
     private void showMsg(String msg,String title, AlertType type)
@@ -255,15 +255,86 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     showMsg("Can't write","Error", AlertType.ERROR);
                 }
             } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|21|149-preAction
-
-                    // write pre-action user code here
+                // write pre-action user code here
 //GEN-LINE:|7-commandAction|22|149-postAction
                 // write post-action user code here
                 try
                 {
-                platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
+                    String currVersion = getAppProperty("MIDlet-Version");
+
+                    HttpConnection httpConn = null;
+                    String url = "http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jad";
+                    InputStream is = null;
+                    OutputStream os = null;
+
+                    try {
+                        // Open an HTTP Connection object
+                        httpConn = (HttpConnection) Connector.open(url);
+                        // Setup HTTP Request to POST
+                        httpConn.setRequestMethod(HttpConnection.POST);
+
+                        httpConn.setRequestProperty("User-Agent",
+                                "Profile/MIDP-1.0 Confirguration/CLDC-1.0");
+                        httpConn.setRequestProperty("Accept_Language", "en-US");
+                        //Content-Type is must to pass parameters in POST Request
+                        httpConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+
+                        os = httpConn.openOutputStream();
+
+                        /**Caution: os.flush() is controversial. It may create unexpected behavior
+                        on certain mobile devices. Try it out for your mobile device **/
+                        //os.flush();
+                        // Read Response from the Server
+                        StringBuffer sb = new StringBuffer();
+                        is = httpConn.openDataInputStream();
+                        int chr;
+                        while ((chr = is.read()) != -1) {
+                            sb.append((char) chr);
+                        }
+
+                        String[] props = split(sb.toString(),"\n");
+
+                        String newVersion = "";
+                        for(int nProp = 0; nProp < props.length; nProp++)
+                        {
+                            String[] cols = split(props[nProp],"=");
+                            String key = cols[0];
+                            String value = cols[1];
+                            key.trim();
+                            value.trim();
+                            if("MIDlet-Version".equalsIgnoreCase(key))
+                            {
+                                newVersion = value;
+                            }
+                        }
+                        if(newVersion.length() >0)
+                        {
+                            if(newVersion.equalsIgnoreCase(currVersion))
+                            {
+                                platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
+                            }
+                        }
+                        else
+                        {
+                            showMsg("Unable to determine the latest version", "Warning", AlertType.WARNING);
+                        }
+                    } finally {
+                        if (is != null) {
+                            is.close();
+                        }
+                        if (os != null) {
+                            os.close();
+                        }
+                        if (httpConn != null) {
+                            httpConn.close();
+                        }
+                    }
+
                 }
-                catch(Exception e){}
+                catch(Exception e){
+                    showMsg("Unable to check for update.", "Error", AlertType.ERROR);
+                }
             } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|23|67-preAction
                 // write pre-action user code here
 //GEN-LINE:|7-commandAction|24|67-postAction
@@ -323,7 +394,9 @@ public class TrackExpense extends MIDlet implements CommandListener {
                     is.write(("Date,Amount,Description,Category\n").getBytes());
                     while (re.hasNextElement()) {
                         String data = new String(re.nextRecord());
-                        is.write((data + "\n").getBytes());
+                        String[] cols = split(data,deLimiter);
+                        data = "\"" + cols[0] + "\"," + cols[1] + ",\"" + cols[2] + "\",\"" + cols[3] + "\"\n";
+                        is.write((data).getBytes());
                     }
 
                     is.close();
@@ -391,6 +464,7 @@ public class TrackExpense extends MIDlet implements CommandListener {
             form.addCommand(getAboutCommand());
             form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
             // write post-init user code here
+            form.setItemStateListener(this);
         }//GEN-BEGIN:|14-getter|2|
         return form;
     }
@@ -1281,7 +1355,7 @@ public class TrackExpense extends MIDlet implements CommandListener {
     public Command getCheckUpdateCommand() {
         if (checkUpdateCommand == null) {//GEN-END:|148-getter|0|148-preInit
             // write pre-init user code here
-            checkUpdateCommand = new Command("Screen", Command.SCREEN, 0);//GEN-LINE:|148-getter|1|148-postInit
+            checkUpdateCommand = new Command("Check for update", Command.SCREEN, 0);//GEN-LINE:|148-getter|1|148-postInit
             // write post-init user code here
         }//GEN-BEGIN:|148-getter|2|
         return checkUpdateCommand;
@@ -1337,6 +1411,13 @@ public class TrackExpense extends MIDlet implements CommandListener {
      * @param unconditional if true, then the MIDlet has to be unconditionally terminated and all resources has to be released.
      */
     public void destroyApp(boolean unconditional) {
+    }
+
+    public void itemStateChanged(Item item) {
+        if(item == amount)
+        {
+            dateField.setDate(new Date());
+        }
     }
 
 }
