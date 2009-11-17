@@ -110,7 +110,40 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
      */
     public void startMIDlet() {//GEN-END:|3-startMIDlet|0|3-preAction
             // write pre-action user code here
+        try {
+            RecordStore rs = RecordStore.openRecordStore("MyExpenses", true);
+            String rec = "";
 
+rec = "12/11/2009^900^Amma burn^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "12/11/2009^302^Anil elec^Phone/Water/Elec";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "12/11/2009^70^Burnol,cotton^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "12/11/2009^114^Balarishtam,kottakkal^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "13/11/2009^62^Pril etc.^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "13/11/2009^68^Vegetables^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^130^Leela's kitchen^Eat out";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^18^Banana^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^500^Car, kothanur^Petrol";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^40^Appam, leela's^Eat out";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^100^Vegatables, matam^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^286^Amma dressing^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^410^Wine, pickle etc. Matam^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^965^Big market, kothanur^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^184^Horitcorp^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "14/11/2009^578^Milk^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "15/11/2009^480^Car wheel balance,Veni ^Vehicle";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "15/11/2009^25^Honest,cheese bun, bread^Eat out";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "15/11/2009^36^Horticorp^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "15/11/2009^10^Honest, water^Eat out";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "15/11/2009^20^Infant jesus candle^Donation/Offerings";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "15/11/2009^5^Car parking infant jesus^Donation/Offerings";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "16/11/2009^182^Amma ticket^Travel";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "16/11/2009^20^Banana^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "17/11/2009^120^Amma dressing^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "17/11/2009^300^Car, Kothanur^Petrol";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "17/11/2009^250^Paper^Phone/Water/Elec";rs.addRecord(rec.getBytes(), 0, rec.length());
+rec = "17/11/2009^30^Ketchup^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
+        } catch (Exception e) {
+        }
         switchDisplayable(null, getForm());//GEN-LINE:|3-startMIDlet|1|3-postAction
     }//GEN-BEGIN:|3-startMIDlet|2|
     //</editor-fold>//GEN-END:|3-startMIDlet|2|
