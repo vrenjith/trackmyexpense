@@ -122,7 +122,7 @@
                 </Component>
                 <Component componentID="148" typeID="Cjavax.microedition.lcdui.Command">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VcheckUpdateCommand"/>
-                    <Property name="label" typeID="Pjava.lang.String" value="VScreen"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VCheck for update"/>
                     <Property name="type" typeID="Pint" value="V1"/>
                 </Component>
             </Component>
@@ -402,34 +402,6 @@
                 </Component>
             </Component>
             <Component componentID="13" typeID="C#ResourcesCategory">
-                <Component componentID="129" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage9"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/home.png"/>
-                </Component>
-                <Component componentID="128" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage8"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/car.png"/>
-                </Component>
-                <Component componentID="131" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage11"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/investment.png"/>
-                </Component>
-                <Component componentID="130" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage10"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/loan.png"/>
-                </Component>
-                <Component componentID="133" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage13"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/church.png"/>
-                </Component>
-                <Component componentID="132" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage12"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/movie.png"/>
-                </Component>
-                <Component componentID="134" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage14"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/other.png"/>
-                </Component>
                 <Component componentID="111" typeID="Corg.netbeans.microedition.util.SimpleCancellableTask">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vtask"/>
                 </Component>
@@ -465,25 +437,53 @@
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage"/>
                     <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/travel.png"/>
                 </Component>
+                <Component componentID="137" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage16"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/delete.png"/>
+                </Component>
+                <Component componentID="129" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage9"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/home.png"/>
+                </Component>
+                <Component componentID="128" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage8"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/car.png"/>
+                </Component>
+                <Component componentID="131" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage11"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/investment.png"/>
+                </Component>
+                <Component componentID="130" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage10"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/loan.png"/>
+                </Component>
+                <Component componentID="133" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage13"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/church.png"/>
+                </Component>
+                <Component componentID="132" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage12"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/movie.png"/>
+                </Component>
                 <Component componentID="135" typeID="Cjavax.microedition.lcdui.Image">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage15"/>
                     <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/petrol.png"/>
                 </Component>
-                <Component componentID="137" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage16"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/delete.png"/>
+                <Component componentID="134" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage14"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/other.png"/>
                 </Component>
             </Component>
             <Component componentID="21" typeID="C#DatabindingCategory"/>
         </Component>
     </Document>
     <FlowScene version="1">
-        <Node componentID="85" descriptorID="componentNode85" x="333" y="437"/>
-        <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
-        <Node componentID="136" descriptorID="componentNode136" x="31" y="273"/>
-        <Node componentID="56" descriptorID="componentNode56" x="509" y="191"/>
-        <Node componentID="14" descriptorID="componentNode14" x="204" y="163"/>
-        <Node componentID="106" descriptorID="componentNode106" x="106" y="540"/>
         <Node componentID="91" descriptorID="componentNode91" x="116" y="433"/>
+        <Node componentID="136" descriptorID="componentNode136" x="31" y="273"/>
+        <Node componentID="106" descriptorID="componentNode106" x="106" y="540"/>
+        <Node componentID="14" descriptorID="componentNode14" x="204" y="163"/>
+        <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
+        <Node componentID="85" descriptorID="componentNode85" x="333" y="437"/>
+        <Node componentID="56" descriptorID="componentNode56" x="509" y="191"/>
     </FlowScene>
 </VisualDesign>
