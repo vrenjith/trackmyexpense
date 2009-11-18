@@ -202,6 +202,14 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
                 // write pre-action user code here
                 expSumListAction();//GEN-LINE:|7-commandAction|12|86-postAction
                 // write post-action user code here
+                int nIndex = getExpSumList().getSelectedIndex();
+                if (nIndex >= 0) {                // write pre-action user code here
+                    switchDisplayable(null, getDetailExpList());
+                    // write post-action user code here
+                    String currEntry = getExpSumList().getString(nIndex);
+                    String cols[] = split(currEntry, ":");
+                    fillExpensesDetails(cols[0]);
+                }
             } else if (command == detailsExpensesCommand) {//GEN-LINE:|7-commandAction|13|89-preAction
                 int nIndex = getExpSumList().getSelectedIndex();
                 if (nIndex >= 0) {                // write pre-action user code here
