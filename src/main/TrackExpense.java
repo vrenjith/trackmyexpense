@@ -109,41 +109,7 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
      * Performs an action assigned to the Mobile Device - MIDlet Started point.
      */
     public void startMIDlet() {//GEN-END:|3-startMIDlet|0|3-preAction
-            // write pre-action user code here
-        try {
-            RecordStore rs = RecordStore.openRecordStore("MyExpenses", true);
-            String rec = "";
-
-rec = "12/11/2009^900^Amma burn^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "12/11/2009^302^Anil elec^Phone/Water/Elec";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "12/11/2009^70^Burnol,cotton^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "12/11/2009^114^Balarishtam,kottakkal^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "13/11/2009^62^Pril etc.^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "13/11/2009^68^Vegetables^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^130^Leela's kitchen^Eat out";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^18^Banana^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^500^Car, kothanur^Petrol";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^40^Appam, leela's^Eat out";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^100^Vegatables, matam^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^286^Amma dressing^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^410^Wine, pickle etc. Matam^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^965^Big market, kothanur^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^184^Horitcorp^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "14/11/2009^578^Milk^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "15/11/2009^480^Car wheel balance,Veni ^Vehicle";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "15/11/2009^25^Honest,cheese bun, bread^Eat out";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "15/11/2009^36^Horticorp^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "15/11/2009^10^Honest, water^Eat out";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "15/11/2009^20^Infant jesus candle^Donation/Offerings";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "15/11/2009^5^Car parking infant jesus^Donation/Offerings";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "16/11/2009^182^Amma ticket^Travel";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "16/11/2009^20^Banana^Vegetables";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "17/11/2009^120^Amma dressing^Medical";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "17/11/2009^300^Car, Kothanur^Petrol";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "17/11/2009^250^Paper^Phone/Water/Elec";rs.addRecord(rec.getBytes(), 0, rec.length());
-rec = "17/11/2009^30^Ketchup^Groceries";rs.addRecord(rec.getBytes(), 0, rec.length());
-        } catch (Exception e) {
-        }
+        // write pre-action user code here
         switchDisplayable(null, getForm());//GEN-LINE:|3-startMIDlet|1|3-postAction
     }//GEN-BEGIN:|3-startMIDlet|2|
     //</editor-fold>//GEN-END:|3-startMIDlet|2|
@@ -304,7 +270,7 @@ rec = "17/11/2009^30^Ketchup^Groceries";rs.addRecord(rec.getBytes(), 0, rec.leng
                         // Open an HTTP Connection object
                         httpConn = (HttpConnection) Connector.open(url);
                         // Setup HTTP Request to POST
-                        httpConn.setRequestMethod(HttpConnection.POST);
+                        httpConn.setRequestMethod(HttpConnection.GET);
 
                         httpConn.setRequestProperty("User-Agent",
                                 "Profile/MIDP-1.0 Confirguration/CLDC-1.0");
@@ -326,26 +292,35 @@ rec = "17/11/2009^30^Ketchup^Groceries";rs.addRecord(rec.getBytes(), 0, rec.leng
                             sb.append((char) chr);
                         }
 
-                        String[] props = split(sb.toString(),"\n");
+                        //Delete me
+                        //platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
+                        String strHtmlOut = sb.toString();
+                        String[] props = split(strHtmlOut,"\r\n");
 
                         String newVersion = "";
                         for(int nProp = 0; nProp < props.length; nProp++)
                         {
-                            String[] cols = split(props[nProp],"=");
+                            String[] cols = split(props[nProp],":");
                             String key = cols[0];
                             String value = cols[1];
-                            key.trim();
-                            value.trim();
+                            key = key.trim();
+                            value = value.trim();
                             if("MIDlet-Version".equalsIgnoreCase(key))
                             {
                                 newVersion = value;
+                                break;
                             }
                         }
                         if(newVersion.length() >0)
                         {
-                            if(newVersion.equalsIgnoreCase(currVersion))
+                            if( !newVersion.equalsIgnoreCase(currVersion)
+                                    && (getVersionInt(newVersion) > getVersionInt(currVersion)))
                             {
                                 platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
+                            }
+                            else
+                            {
+                                showMsg("You have already the latest version", "Update", AlertType.INFO);
                             }
                         }
                         else
@@ -460,163 +435,168 @@ rec = "17/11/2009^30^Ketchup^Groceries";rs.addRecord(rec.getBytes(), 0, rec.leng
     }//GEN-BEGIN:|7-commandAction|38|
     //</editor-fold>//GEN-END:|7-commandAction|38|
 
+int getVersionInt(String str)
+{
+    String[] cols = split(str,".");
+    int ret = Integer.parseInt(cols[0])*10000 + Integer.parseInt(cols[1])*1000 + Integer.parseInt(cols[2]);
+    return ret;
+}
 
 
-
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
-    /**
-     * Returns an initiliazed instance of exitCommand component.
-     * @return the initialized component instance
-     */
-    public Command getExitCommand() {
-        if (exitCommand == null) {//GEN-END:|18-getter|0|18-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
+/**
+ * Returns an initiliazed instance of exitCommand component.
+ * @return the initialized component instance
+ */
+public Command getExitCommand() {
+    if (exitCommand == null) {//GEN-END:|18-getter|0|18-preInit
             // write pre-init user code here
-            exitCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|18-getter|1|18-postInit
+        exitCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|18-getter|1|18-postInit
             // write post-init user code here
-        }//GEN-BEGIN:|18-getter|2|
-        return exitCommand;
-    }
-    //</editor-fold>//GEN-END:|18-getter|2|
+    }//GEN-BEGIN:|18-getter|2|
+    return exitCommand;
+}
+//</editor-fold>//GEN-END:|18-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: form ">//GEN-BEGIN:|14-getter|0|14-preInit
-    /**
-     * Returns an initiliazed instance of form component.
-     * @return the initialized component instance
-     */
-    public Form getForm() {
-        if (form == null) {//GEN-END:|14-getter|0|14-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: form ">//GEN-BEGIN:|14-getter|0|14-preInit
+/**
+ * Returns an initiliazed instance of form component.
+ * @return the initialized component instance
+ */
+public Form getForm() {
+    if (form == null) {//GEN-END:|14-getter|0|14-preInit
             // write pre-init user code here
-            form = new Form("TrackExpense", new Item[] { getAmount(), getDetails(), getChoiceGroup(), getDateField() });//GEN-BEGIN:|14-getter|1|14-postInit
-            form.addCommand(getExitCommand());
-            form.addCommand(getAddExpenseCommand());
-            form.addCommand(getExpenseDetailsCommand());
-            form.addCommand(getExpensesummaryCommand());
-            form.addCommand(getCleanExpensesCommand());
-            form.addCommand(getExportExpensesCommand());
-            form.addCommand(getCheckUpdateCommand());
-            form.addCommand(getAboutCommand());
-            form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
+        form = new Form("TrackExpense", new Item[] { getAmount(), getDetails(), getChoiceGroup(), getDateField() });//GEN-BEGIN:|14-getter|1|14-postInit
+        form.addCommand(getExitCommand());
+        form.addCommand(getAddExpenseCommand());
+        form.addCommand(getExpenseDetailsCommand());
+        form.addCommand(getExpensesummaryCommand());
+        form.addCommand(getCleanExpensesCommand());
+        form.addCommand(getExportExpensesCommand());
+        form.addCommand(getCheckUpdateCommand());
+        form.addCommand(getAboutCommand());
+        form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
             // write post-init user code here
             form.setItemStateListener(this);
-        }//GEN-BEGIN:|14-getter|2|
-        return form;
-    }
-    //</editor-fold>//GEN-END:|14-getter|2|
+    }//GEN-BEGIN:|14-getter|2|
+    return form;
+}
+//</editor-fold>//GEN-END:|14-getter|2|
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: amount ">//GEN-BEGIN:|22-getter|0|22-preInit
-    /**
-     * Returns an initiliazed instance of amount component.
-     * @return the initialized component instance
-     */
-    public TextField getAmount() {
-        if (amount == null) {//GEN-END:|22-getter|0|22-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: amount ">//GEN-BEGIN:|22-getter|0|22-preInit
+/**
+ * Returns an initiliazed instance of amount component.
+ * @return the initialized component instance
+ */
+public TextField getAmount() {
+    if (amount == null) {//GEN-END:|22-getter|0|22-preInit
             // write pre-init user code here
-            amount = new TextField("Amount", null, 32, TextField.NUMERIC);//GEN-LINE:|22-getter|1|22-postInit
+        amount = new TextField("Amount", null, 32, TextField.NUMERIC);//GEN-LINE:|22-getter|1|22-postInit
             // write post-init user code here
-        }//GEN-BEGIN:|22-getter|2|
-        return amount;
-    }
-    //</editor-fold>//GEN-END:|22-getter|2|
+    }//GEN-BEGIN:|22-getter|2|
+    return amount;
+}
+//</editor-fold>//GEN-END:|22-getter|2|
 
 
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: details ">//GEN-BEGIN:|25-getter|0|25-preInit
-    /**
-     * Returns an initiliazed instance of details component.
-     * @return the initialized component instance
-     */
-    public TextField getDetails() {
-        if (details == null) {//GEN-END:|25-getter|0|25-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: details ">//GEN-BEGIN:|25-getter|0|25-preInit
+/**
+ * Returns an initiliazed instance of details component.
+ * @return the initialized component instance
+ */
+public TextField getDetails() {
+    if (details == null) {//GEN-END:|25-getter|0|25-preInit
             // write pre-init user code here
-            details = new TextField("Details", null, 32, TextField.ANY);//GEN-LINE:|25-getter|1|25-postInit
+        details = new TextField("Details", null, 32, TextField.ANY);//GEN-LINE:|25-getter|1|25-postInit
             // write post-init user code here
-        }//GEN-BEGIN:|25-getter|2|
-        return details;
-    }
-    //</editor-fold>//GEN-END:|25-getter|2|
+    }//GEN-BEGIN:|25-getter|2|
+    return details;
+}
+//</editor-fold>//GEN-END:|25-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: addExpenseCommand ">//GEN-BEGIN:|26-getter|0|26-preInit
-    /**
-     * Returns an initiliazed instance of addExpenseCommand component.
-     * @return the initialized component instance
-     */
-    public Command getAddExpenseCommand() {
-        if (addExpenseCommand == null) {//GEN-END:|26-getter|0|26-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: addExpenseCommand ">//GEN-BEGIN:|26-getter|0|26-preInit
+/**
+ * Returns an initiliazed instance of addExpenseCommand component.
+ * @return the initialized component instance
+ */
+public Command getAddExpenseCommand() {
+    if (addExpenseCommand == null) {//GEN-END:|26-getter|0|26-preInit
             // write pre-init user code here
-            addExpenseCommand = new Command("Add Expense", Command.OK, 0);//GEN-LINE:|26-getter|1|26-postInit
+        addExpenseCommand = new Command("Add Expense", Command.OK, 0);//GEN-LINE:|26-getter|1|26-postInit
             // write post-init user code here
-        }//GEN-BEGIN:|26-getter|2|
-        return addExpenseCommand;
-    }
-    //</editor-fold>//GEN-END:|26-getter|2|
+    }//GEN-BEGIN:|26-getter|2|
+    return addExpenseCommand;
+}
+//</editor-fold>//GEN-END:|26-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: choiceGroup ">//GEN-BEGIN:|29-getter|0|29-preInit
-    /**
-     * Returns an initiliazed instance of choiceGroup component.
-     * @return the initialized component instance
-     */
-    public ChoiceGroup getChoiceGroup() {
-        if (choiceGroup == null) {//GEN-END:|29-getter|0|29-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: choiceGroup ">//GEN-BEGIN:|29-getter|0|29-preInit
+/**
+ * Returns an initiliazed instance of choiceGroup component.
+ * @return the initialized component instance
+ */
+public ChoiceGroup getChoiceGroup() {
+    if (choiceGroup == null) {//GEN-END:|29-getter|0|29-preInit
             // write pre-init user code here
-            choiceGroup = new ChoiceGroup("Category", Choice.POPUP);//GEN-BEGIN:|29-getter|1|29-postInit
-            choiceGroup.append("Travel", getImage());
-            choiceGroup.append("Petrol", getImage15());
-            choiceGroup.append("Groceries", getImage1());
-            choiceGroup.append("Vegetables", getImage2());
-            choiceGroup.append("Apparels", getImage3());
-            choiceGroup.append("Eat out", getImage4());
-            choiceGroup.append("Medical", getImage5());
-            choiceGroup.append("Phone/Water/Elec", getImage6());
-            choiceGroup.append("Child/School", getImage7());
-            choiceGroup.append("Vehicle", getImage8());
-            choiceGroup.append("Home Improvement", getImage9());
-            choiceGroup.append("Loan", getImage10());
-            choiceGroup.append("Investment", getImage11());
-            choiceGroup.append("Movie/Entertainment", getImage12());
-            choiceGroup.append("Donation/Offerings", getImage13());
-            choiceGroup.append("Other", getImage14());
-            choiceGroup.setSelectedFlags(new boolean[] { false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false });//GEN-END:|29-getter|1|29-postInit
+        choiceGroup = new ChoiceGroup("Category", Choice.POPUP);//GEN-BEGIN:|29-getter|1|29-postInit
+        choiceGroup.append("Travel", getImage());
+        choiceGroup.append("Petrol", getImage15());
+        choiceGroup.append("Groceries", getImage1());
+        choiceGroup.append("Vegetables", getImage2());
+        choiceGroup.append("Apparels", getImage3());
+        choiceGroup.append("Eat out", getImage4());
+        choiceGroup.append("Medical", getImage5());
+        choiceGroup.append("Phone/Water/Elec", getImage6());
+        choiceGroup.append("Child/School", getImage7());
+        choiceGroup.append("Vehicle", getImage8());
+        choiceGroup.append("Home Improvement", getImage9());
+        choiceGroup.append("Loan", getImage10());
+        choiceGroup.append("Investment", getImage11());
+        choiceGroup.append("Movie/Entertainment", getImage12());
+        choiceGroup.append("Donation/Offerings", getImage13());
+        choiceGroup.append("Other", getImage14());
+        choiceGroup.setSelectedFlags(new boolean[] { false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false });//GEN-END:|29-getter|1|29-postInit
             // write post-init user code here
-        }//GEN-BEGIN:|29-getter|2|
-        return choiceGroup;
-    }
-    //</editor-fold>//GEN-END:|29-getter|2|
+    }//GEN-BEGIN:|29-getter|2|
+    return choiceGroup;
+}
+//</editor-fold>//GEN-END:|29-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: okCommand ">//GEN-BEGIN:|60-getter|0|60-preInit
-    /**
-     * Returns an initiliazed instance of okCommand component.
-     * @return the initialized component instance
-     */
-    public Command getOkCommand() {
-        if (okCommand == null) {//GEN-END:|60-getter|0|60-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: okCommand ">//GEN-BEGIN:|60-getter|0|60-preInit
+/**
+ * Returns an initiliazed instance of okCommand component.
+ * @return the initialized component instance
+ */
+public Command getOkCommand() {
+    if (okCommand == null) {//GEN-END:|60-getter|0|60-preInit
             // write pre-init user code here
-            okCommand = new Command("Back", Command.BACK, 0);//GEN-LINE:|60-getter|1|60-postInit
+        okCommand = new Command("Back", Command.BACK, 0);//GEN-LINE:|60-getter|1|60-postInit
             // write post-init user code here
-        }//GEN-BEGIN:|60-getter|2|
-        return okCommand;
-    }
-    //</editor-fold>//GEN-END:|60-getter|2|
+    }//GEN-BEGIN:|60-getter|2|
+    return okCommand;
+}
+//</editor-fold>//GEN-END:|60-getter|2|
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: detailExpList ">//GEN-BEGIN:|56-getter|0|56-preInit
-    /**
-     * Returns an initiliazed instance of detailExpList component.
-     * @return the initialized component instance
-     */
-    public List getDetailExpList() {
-        if (detailExpList == null) {//GEN-END:|56-getter|0|56-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: detailExpList ">//GEN-BEGIN:|56-getter|0|56-preInit
+/**
+ * Returns an initiliazed instance of detailExpList component.
+ * @return the initialized component instance
+ */
+public List getDetailExpList() {
+    if (detailExpList == null) {//GEN-END:|56-getter|0|56-preInit
             // write pre-init user code here
-            detailExpList = new List("Expense Details", Choice.IMPLICIT);//GEN-BEGIN:|56-getter|1|56-postInit
-            detailExpList.addCommand(getOkCommand());
-            detailExpList.addCommand(getDeleteExpense());
-            detailExpList.setCommandListener(this);//GEN-END:|56-getter|1|56-postInit
+        detailExpList = new List("Expense Details", Choice.IMPLICIT);//GEN-BEGIN:|56-getter|1|56-postInit
+        detailExpList.addCommand(getOkCommand());
+        detailExpList.addCommand(getDeleteExpense());
+        detailExpList.setCommandListener(this);//GEN-END:|56-getter|1|56-postInit
             // write post-init user code here
-        }//GEN-BEGIN:|56-getter|2|
-        return detailExpList;
-    }
-    //</editor-fold>//GEN-END:|56-getter|2|
+    }//GEN-BEGIN:|56-getter|2|
+    return detailExpList;
+}
+//</editor-fold>//GEN-END:|56-getter|2|
 
     private String[] split(String original) {
         return split(original, ",");
