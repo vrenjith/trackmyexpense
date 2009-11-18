@@ -5,6 +5,6 @@ MIDlet-Jar-Size: 105068
 MIDlet-Jar-URL: TrackExpenses.jar
 MIDlet-Name: TrackExpenses
 MIDlet-Vendor: Regy Inc
-MIDlet-Version: 0.0.61
+MIDlet-Version: 0.0.62
 MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
