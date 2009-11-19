@@ -120,10 +120,20 @@
                     <Property name="label" typeID="Pjava.lang.String" value="VBack"/>
                     <Property name="type" typeID="Pint" value="V2"/>
                 </Component>
+                <Component componentID="153" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VexitWOReportCommand"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VExit"/>
+                    <Property name="type" typeID="Pint" value="V7"/>
+                </Component>
                 <Component componentID="148" typeID="Cjavax.microedition.lcdui.Command">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VcheckUpdateCommand"/>
                     <Property name="label" typeID="Pjava.lang.String" value="VCheck for update"/>
                     <Property name="type" typeID="Pint" value="V1"/>
+                </Component>
+                <Component componentID="151" typeID="Cjavax.microedition.lcdui.Command">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VreportBugsCommand"/>
+                    <Property name="label" typeID="Pjava.lang.String" value="VOk"/>
+                    <Property name="type" typeID="Pint" value="V4"/>
                 </Component>
             </Component>
             <Component componentID="10" typeID="C#DisplayablesCategory">
@@ -134,12 +144,12 @@
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
                     <Property name="items" typeID="1Cjavax.microedition.lcdui.Item" value="A4:3_R223_R253_R294_R104"/>
                     <Component componentID="19" typeID="C#CommandEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R20"/>
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R158"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R18"/>
-                        <Component componentID="20" typeID="C#ExitMidletEventHandler">
+                        <Component componentID="158" typeID="C#SwitchDisplayableEventHandler">
                             <Property name="eventSource" typeID="C#EventSource" value="R19"/>
-                            <Property name="mobileDevice" typeID="C#MobileDevice" value="R2"/>
+                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R150"/>
                         </Component>
                     </Component>
                     <Component componentID="22" typeID="Cjavax.microedition.lcdui.TextField">
@@ -373,14 +383,6 @@
                     <Property name="string" typeID="Pjava.lang.String" value="VDelete the expense?"/>
                     <Property name="timeout" typeID="Pint" value="V-2"/>
                     <Property name="type" typeID="Ejavax.microedition.lcdui.AlertType" value="ECONFIRMATION"/>
-                    <Property name="indicator" typeID="Cjavax.microedition.lcdui.Gauge" value="R140"/>
-                    <Component componentID="140" typeID="Cjavax.microedition.lcdui.Gauge">
-                        <Property name="instanceName" typeID="Pjava.lang.String" value="Vindicator"/>
-                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
-                        <Property name="usedByAlert" typeID="Pboolean" value="Vtrue"/>
-                        <Property name="value" typeID="Pint" value="V50"/>
-                        <Property name="maxValue" typeID="Pint" value="V100"/>
-                    </Component>
                     <Component componentID="142" typeID="C#CommandEventSource">
                         <Property name="eventHandler" typeID="C#EventHandler" value="R147"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R136"/>
@@ -397,6 +399,34 @@
                         <Component componentID="146" typeID="C#SwitchDisplayableEventHandler">
                             <Property name="eventSource" typeID="C#EventSource" value="R144"/>
                             <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R56"/>
+                        </Component>
+                    </Component>
+                </Component>
+                <Component componentID="150" typeID="Cjavax.microedition.lcdui.Alert">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="VReportBugs"/>
+                    <Property name="commands" typeID="1C#CommandEventSource" value="A2:4_R1524_R154"/>
+                    <Property name="title" typeID="Pjava.lang.String" value="VReport Bugs"/>
+                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
+                    <Property name="image" typeID="Cjavax.microedition.lcdui.Image" value="R157"/>
+                    <Property name="string" typeID="Pjava.lang.String" value="VThere we some exceptions during the program execution. Do you like to report them to improve the program quality?"/>
+                    <Property name="timeout" typeID="Pint" value="V-2"/>
+                    <Property name="type" typeID="Ejavax.microedition.lcdui.AlertType" value="ECONFIRMATION"/>
+                    <Component componentID="152" typeID="C#CommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R156"/>
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R150"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R151"/>
+                        <Component componentID="156" typeID="C#ExitMidletEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R152"/>
+                            <Property name="mobileDevice" typeID="C#MobileDevice" value="R2"/>
+                        </Component>
+                    </Component>
+                    <Component componentID="154" typeID="C#CommandEventSource">
+                        <Property name="eventHandler" typeID="C#EventHandler" value="R155"/>
+                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R150"/>
+                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R153"/>
+                        <Component componentID="155" typeID="C#ExitMidletEventHandler">
+                            <Property name="eventSource" typeID="C#EventSource" value="R154"/>
+                            <Property name="mobileDevice" typeID="C#MobileDevice" value="R2"/>
                         </Component>
                     </Component>
                 </Component>
@@ -473,17 +503,22 @@
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage14"/>
                     <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/other.png"/>
                 </Component>
+                <Component componentID="157" typeID="Cjavax.microedition.lcdui.Image">
+                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage17"/>
+                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/bug.png"/>
+                </Component>
             </Component>
             <Component componentID="21" typeID="C#DatabindingCategory"/>
         </Component>
     </Document>
     <FlowScene version="1">
-        <Node componentID="136" descriptorID="componentNode136" x="31" y="273"/>
-        <Node componentID="91" descriptorID="componentNode91" x="116" y="433"/>
-        <Node componentID="85" descriptorID="componentNode85" x="333" y="437"/>
-        <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
-        <Node componentID="56" descriptorID="componentNode56" x="509" y="191"/>
         <Node componentID="106" descriptorID="componentNode106" x="106" y="540"/>
+        <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
+        <Node componentID="85" descriptorID="componentNode85" x="333" y="437"/>
+        <Node componentID="56" descriptorID="componentNode56" x="509" y="191"/>
+        <Node componentID="150" descriptorID="componentNode150" x="496" y="36"/>
+        <Node componentID="136" descriptorID="componentNode136" x="31" y="273"/>
         <Node componentID="14" descriptorID="componentNode14" x="204" y="163"/>
+        <Node componentID="91" descriptorID="componentNode91" x="116" y="433"/>
     </FlowScene>
 </VisualDesign>

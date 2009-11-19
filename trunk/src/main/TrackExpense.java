@@ -5,8 +5,10 @@
 
 package main;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -18,6 +20,8 @@ import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
+import javax.wireless.messaging.MessageConnection;
+import javax.wireless.messaging.TextMessage;
 import org.netbeans.microedition.lcdui.WaitScreen;
 import org.netbeans.microedition.util.SimpleCancellableTask;
 
@@ -30,6 +34,7 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private String currFilter = "";
     private int[] currIndices = null;
     String deLimiter = "^";
+    Vector exceptions = new Vector();
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Fields ">//GEN-BEGIN:|fields|0|
     private Command exitCommand;
@@ -45,7 +50,9 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Command expenseDetailsCommand;
     private Command deleteCommand;
     private Command backCommand;
+    private Command exitWOReportCommand;
     private Command checkUpdateCommand;
+    private Command reportBugsCommand;
     private Form form;
     private TextField amount;
     private TextField details;
@@ -56,7 +63,7 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Alert About;
     private WaitScreen waitScreen;
     private Alert Delete;
-    private Gauge indicator;
+    private Alert ReportBugs;
     private SimpleCancellableTask task;
     private Image image7;
     private Image image6;
@@ -75,6 +82,7 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Image image12;
     private Image image15;
     private Image image14;
+    private Image image17;
     //</editor-fold>//GEN-END:|fields|0|
 
     private void showMsg(String msg,String title, AlertType type)
@@ -82,6 +90,97 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
         Alert a = new Alert(title, msg, null, type);
         a.setTimeout(Alert.FOREVER);
         Display.getDisplay(this).setCurrent(a);
+    }
+private String URLEncode(String s)
+   {
+      StringBuffer sbuf = new StringBuffer();
+      int ch;
+      for (int i = 0; i < s.length(); i++)
+      {
+         ch = s.charAt(i);
+         switch(ch)
+         {
+            case ' ': { sbuf.append("+"); break;}
+            case '!': { sbuf.append("%21"); break;}
+            case '*': { sbuf.append("%2A"); break;}
+            case '\'': { sbuf.append("%27"); break;}
+            case '(': { sbuf.append("%28"); break;}
+            case ')': { sbuf.append("%29"); break;}
+            case ';': { sbuf.append("%3B"); break;}
+            case ':': { sbuf.append("%3A"); break;}
+            case '@': { sbuf.append("%40"); break;}
+            case '&': { sbuf.append("%26"); break;}
+            case '=': { sbuf.append("%3D"); break;}
+            case '+': { sbuf.append("%2B"); break;}
+            case '$': { sbuf.append("%24"); break;}
+            case ',': { sbuf.append("%2C"); break;}
+            case '/': { sbuf.append("%2F"); break;}
+            case '?': { sbuf.append("%3F"); break;}
+            case '%': { sbuf.append("%25"); break;}
+            case '#': { sbuf.append("%23"); break;}
+            case '[': { sbuf.append("%5B"); break;}
+            case ']': { sbuf.append("%5D"); break;}
+            default: sbuf.append((char)ch);
+         }
+      }
+      return sbuf.toString();
+   }
+    private void postBug(String exception)
+   {
+        HttpConnection httpConn = null;
+        String url = "http://webmediator.appspot.com/";
+        InputStream is = null;
+        OutputStream os = null;
+
+        try {
+            // Open an HTTP Connection object
+            httpConn = (HttpConnection) Connector.open(url);
+            // Setup HTTP Request to POST
+            httpConn.setRequestMethod(HttpConnection.POST);
+
+            httpConn.setRequestProperty("User-Agent",
+                    "Profile/MIDP-1.0 Confirguration/CLDC-1.0");
+            httpConn.setRequestProperty("Accept_Language", "en-US");
+            //Content-Type is must to pass parameters in POST Request
+            httpConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            String params;
+            params = URLEncode("exception") + "=" + URLEncode(exception);
+            try
+            {
+                params += "&" + URLEncode("model") + "=" +URLEncode(System.getProperty("microedition.platform"));
+            } catch(Exception e){}
+
+            httpConn.setRequestProperty("Content-length", ""+params.getBytes().length);
+
+            os = httpConn.openOutputStream();
+            os.write(params.getBytes());
+            
+
+            /**Caution: os.flush() is controversial. It may create unexpected behavior
+            on certain mobile devices. Try it out for your mobile device **/
+            //os.flush();
+            // Read Response from the Server
+            StringBuffer sb = new StringBuffer();
+            is = httpConn.openDataInputStream();
+            int chr;
+            while ((chr = is.read()) != -1) {
+                sb.append((char) chr);
+            }
+
+            String sout = sb.toString();
+
+            if (is != null) {
+                is.close();
+            }
+            if (os != null) {
+                os.close();
+            }
+            if (httpConn != null) {
+                httpConn.close();
+            }
+        } catch (Exception e) {
+        }
     }
     /**
      * The HelloMIDlet constructor.
@@ -170,24 +269,57 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
                         fillExpensesDetails(currFilter);
                     }
                 } catch (Exception ex) {
-                    //showMsg("Unable to delete", "Error", AlertType.ERROR);
+                    reportBug(ex);
                 }
-            }//GEN-BEGIN:|7-commandAction|5|58-preAction
-        } else if (displayable == detailExpList) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|5|58-preAction
+            }//GEN-BEGIN:|7-commandAction|5|154-preAction
+        } else if (displayable == ReportBugs) {
+            if (command == exitWOReportCommand) {//GEN-END:|7-commandAction|5|154-preAction
                 // write pre-action user code here
-                detailExpListAction();//GEN-LINE:|7-commandAction|6|58-postAction
+                exitMIDlet();//GEN-LINE:|7-commandAction|6|154-postAction
                 // write post-action user code here
-            } else if (command == deleteExpense) {//GEN-LINE:|7-commandAction|7|118-preAction
+            } else if (command == reportBugsCommand) {//GEN-LINE:|7-commandAction|7|152-preAction
+                // write pre-action user code here
+                switchDisplayable(null, null);
+                ReportBugs.setTimeout(1);
+
+                String strMessage = "";
+                int nErrCount = 1;
+                Enumeration e = exceptions.elements();
+                while (e.hasMoreElements()) {
+                        Exception excep = (Exception)e.nextElement();
+                        strMessage += "[" + nErrCount +"]\n";
+                        strMessage += excep.getMessage() + "\n";
+                }
+                try
+                {
+//                    MessageConnection clientConn;
+//                    clientConn=(MessageConnection)Connector.open("sms://+919845258299");
+//                    TextMessage textmessage = (TextMessage) clientConn.newMessage(MessageConnection.TEXT_MESSAGE);
+//                    textmessage.setAddress("sms://+919845258299");
+//                    textmessage.setPayloadText(strMessage);
+//                    clientConn.send(textmessage);
+                        postBug(strMessage);
+                }
+                catch(Exception ew){}
+
+                exitMIDlet();//GEN-LINE:|7-commandAction|8|152-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|9|58-preAction
+        } else if (displayable == detailExpList) {
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|9|58-preAction
+                // write pre-action user code here
+                detailExpListAction();//GEN-LINE:|7-commandAction|10|58-postAction
+                // write post-action user code here
+            } else if (command == deleteExpense) {//GEN-LINE:|7-commandAction|11|118-preAction
                 // write pre-action user code here
                 int nIndex = getExpSumList().getSelectedIndex();
                 if (nIndex >= 0) {
-                    switchDisplayable(null, getDelete());//GEN-LINE:|7-commandAction|8|118-postAction
+                    switchDisplayable(null, getDelete());//GEN-LINE:|7-commandAction|12|118-postAction
                     // write post-action user code here
                 }
-            } else if (command == okCommand) {//GEN-LINE:|7-commandAction|9|61-preAction
+            } else if (command == okCommand) {//GEN-LINE:|7-commandAction|13|61-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|10|61-postAction
+//GEN-LINE:|7-commandAction|14|61-postAction
                 // write post-action user code here
                 if(currFilter.equalsIgnoreCase("")) {
                     switchDisplayable(null, getForm());
@@ -196,11 +328,11 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
                     fillExpenseSummary();
                     switchDisplayable(null, getExpSumList());
                 }
-            }//GEN-BEGIN:|7-commandAction|11|86-preAction
+            }//GEN-BEGIN:|7-commandAction|15|86-preAction
         } else if (displayable == expSumList) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|11|86-preAction
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|15|86-preAction
                 // write pre-action user code here
-                expSumListAction();//GEN-LINE:|7-commandAction|12|86-postAction
+                expSumListAction();//GEN-LINE:|7-commandAction|16|86-postAction
                 // write post-action user code here
                 int nIndex = getExpSumList().getSelectedIndex();
                 if (nIndex >= 0) {                // write pre-action user code here
@@ -210,28 +342,28 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
                     String cols[] = split(currEntry, ":");
                     fillExpensesDetails(cols[0]);
                 }
-            } else if (command == detailsExpensesCommand) {//GEN-LINE:|7-commandAction|13|89-preAction
+            } else if (command == detailsExpensesCommand) {//GEN-LINE:|7-commandAction|17|89-preAction
                 int nIndex = getExpSumList().getSelectedIndex();
                 if (nIndex >= 0) {                // write pre-action user code here
-                    switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|14|89-postAction
+                    switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|18|89-postAction
                     // write post-action user code here
                     String currEntry = getExpSumList().getString(nIndex);
                     String cols[] = split(currEntry, ":");
                     fillExpensesDetails(cols[0]);
                 }
-            } else if (command == returnCommand) {//GEN-LINE:|7-commandAction|15|96-preAction
+            } else if (command == returnCommand) {//GEN-LINE:|7-commandAction|19|96-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|16|96-postAction
+                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|20|96-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|17|83-preAction
+            }//GEN-BEGIN:|7-commandAction|21|83-preAction
         } else if (displayable == form) {
-            if (command == aboutCommand) {//GEN-END:|7-commandAction|17|83-preAction
+            if (command == aboutCommand) {//GEN-END:|7-commandAction|21|83-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|18|83-postAction
+                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|22|83-postAction
                 // write post-action user code here
-            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|19|27-preAction
+            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|23|27-preAction
                     // write pre-action user code here
-//GEN-LINE:|7-commandAction|20|27-postAction
+//GEN-LINE:|7-commandAction|24|27-postAction
                 try
                 {
                     if(0 != getAmount().getString().length())
@@ -258,12 +390,12 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
                 }
                 catch(Exception rse)
                 {
-                    rse.printStackTrace();
+                    reportBug(rse);
                     showMsg("Can't write","Error", AlertType.ERROR);
                 }
-            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|21|149-preAction
+            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|25|149-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|22|149-postAction
+//GEN-LINE:|7-commandAction|26|149-postAction
                 // write post-action user code here
                 try
                 {
@@ -324,6 +456,7 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
                             if( !newVersion.equalsIgnoreCase(currVersion)
                                     && (getVersionInt(newVersion) > getVersionInt(currVersion)))
                             {
+                                exitMIDlet();
                                 platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
                             }
                             else
@@ -349,37 +482,46 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
 
                 }
                 catch(Exception e){
+                    reportBug(e);
                     showMsg("Unable to check for update.", "Error", AlertType.ERROR);
                 }
-            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|23|67-preAction
+            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|27|67-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|24|67-postAction
+//GEN-LINE:|7-commandAction|28|67-postAction
                 // write post-action user code here
                 if (RecordStore.listRecordStores() != null) {
                     try {
                         RecordStore.deleteRecordStore("MyExpenses");
                         showMsg("Cleaned datastore","Information", AlertType.INFO);
                     } catch (Exception e) {
+                        reportBug(e);
                         showMsg("Can't delete the datastore","Error", AlertType.ERROR);
                     }
                 }
-            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|25|19-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|29|19-preAction
                 // write pre-action user code here
-                exitMIDlet();//GEN-LINE:|7-commandAction|26|19-postAction
-                // write post-action user code here
-            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|27|113-preAction
+                if(exceptions.isEmpty())
+                {
+                    exitMIDlet();
+                }
+                else
+                {
+                    switchDisplayable(null, getReportBugs());//GEN-LINE:|7-commandAction|30|19-postAction
+                    // write post-action user code here
+                }
+            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|31|113-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|28|113-postAction
+                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|32|113-postAction
                 // write post-action user code here
                 fillExpensesDetails("");
-            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|29|80-preAction
+            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|33|80-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|30|80-postAction
+                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|34|80-postAction
                 // write post-action user code here
                 fillExpenseSummary();
-            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|31|75-preAction
+            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|35|75-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|32|75-postAction
+//GEN-LINE:|7-commandAction|36|75-postAction
                 // write post-action user code here
                 RecordStore rs = null;
                 try {
@@ -387,7 +529,7 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
                     Calendar c = Calendar.getInstance();
                     c.setTime(d);
                     String dt = c.get(Calendar.DAY_OF_MONTH) + "_" + (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.YEAR);
-                    String fileName = "file:///e:/myexpenses_" + dt + ".csv";
+                    String fileName = System.getProperty("fileconn.dir.memorycard") + "myexpenses_" + dt + ".csv";
                     FileConnection fc = (FileConnection) Connector.open(fileName, Connector.READ_WRITE);
                     if (!fc.exists()) {
                         fc.create();
@@ -419,29 +561,31 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
                     fc.close();
                     showMsg("Exported as " + fileName,"Information", AlertType.INFO);
                 } catch (Exception e) {
+                    reportBug(e);
                     showMsg("Failed to export","Error", AlertType.ERROR);
                 }
                 if (null != rs) {
                     try {
                         rs.closeRecordStore();
                     } catch (Exception e) {
+                        reportBug(e);
                     }
                 }
-            }//GEN-BEGIN:|7-commandAction|33|110-preAction
+            }//GEN-BEGIN:|7-commandAction|37|110-preAction
         } else if (displayable == waitScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|33|110-preAction
+            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|37|110-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|34|110-postAction
+//GEN-LINE:|7-commandAction|38|110-postAction
                 // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|35|109-preAction
+            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|39|109-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|36|109-postAction
+//GEN-LINE:|7-commandAction|40|109-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|37|7-postCommandAction
-        }//GEN-END:|7-commandAction|37|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|41|7-postCommandAction
+        }//GEN-END:|7-commandAction|41|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|38|
-    //</editor-fold>//GEN-END:|7-commandAction|38|
+    }//GEN-BEGIN:|7-commandAction|42|
+    //</editor-fold>//GEN-END:|7-commandAction|42|
 
 int getVersionInt(String str)
 {
@@ -450,6 +594,10 @@ int getVersionInt(String str)
     return ret;
 }
 
+void reportBug(Exception e)
+{
+    exceptions.addElement(e);
+}
 
 //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand ">//GEN-BEGIN:|18-getter|0|18-preInit
 /**
@@ -673,6 +821,7 @@ public List getDetailExpList() {
             }
 
         } catch (Exception e) {
+            reportBug(e);
             //showMsg("Can't open datastore", "Error", AlertType.ERROR);
         }
         if (null != rs) {
@@ -734,12 +883,14 @@ public List getDetailExpList() {
             //getDetailExpList().setSelectedIndex(0, true);
             
         } catch (Exception e) {
+            reportBug(e);
             //showMsg("Can't open datastore", "Error", AlertType.ERROR);
         }
         if (null != rs) {
             try {
                 rs.closeRecordStore();
             } catch (Exception e) {
+                reportBug(e);
             }
         }
     }
@@ -1296,7 +1447,6 @@ public List getDetailExpList() {
             Delete.addCommand(getDeleteCommand());
             Delete.addCommand(getBackCommand());
             Delete.setCommandListener(this);
-            Delete.setIndicator(getIndicator());
             Delete.setTimeout(Alert.FOREVER);//GEN-END:|136-getter|1|136-postInit
             // write post-init user code here
         }//GEN-BEGIN:|136-getter|2|
@@ -1353,20 +1503,7 @@ public List getDetailExpList() {
     }
     //</editor-fold>//GEN-END:|143-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: indicator ">//GEN-BEGIN:|140-getter|0|140-preInit
-    /**
-     * Returns an initiliazed instance of indicator component.
-     * @return the initialized component instance
-     */
-    public Gauge getIndicator() {
-        if (indicator == null) {//GEN-END:|140-getter|0|140-preInit
-            // write pre-init user code here
-            indicator = new Gauge(null, false, 100, 50);//GEN-LINE:|140-getter|1|140-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|140-getter|2|
-        return indicator;
-    }
-    //</editor-fold>//GEN-END:|140-getter|2|
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: checkUpdateCommand ">//GEN-BEGIN:|148-getter|0|148-preInit
     /**
@@ -1382,6 +1519,74 @@ public List getDetailExpList() {
         return checkUpdateCommand;
     }
     //</editor-fold>//GEN-END:|148-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: reportBugsCommand ">//GEN-BEGIN:|151-getter|0|151-preInit
+    /**
+     * Returns an initiliazed instance of reportBugsCommand component.
+     * @return the initialized component instance
+     */
+    public Command getReportBugsCommand() {
+        if (reportBugsCommand == null) {//GEN-END:|151-getter|0|151-preInit
+            // write pre-init user code here
+            reportBugsCommand = new Command("Ok", Command.OK, 0);//GEN-LINE:|151-getter|1|151-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|151-getter|2|
+        return reportBugsCommand;
+    }
+    //</editor-fold>//GEN-END:|151-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitWOReportCommand ">//GEN-BEGIN:|153-getter|0|153-preInit
+    /**
+     * Returns an initiliazed instance of exitWOReportCommand component.
+     * @return the initialized component instance
+     */
+    public Command getExitWOReportCommand() {
+        if (exitWOReportCommand == null) {//GEN-END:|153-getter|0|153-preInit
+            // write pre-init user code here
+            exitWOReportCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|153-getter|1|153-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|153-getter|2|
+        return exitWOReportCommand;
+    }
+    //</editor-fold>//GEN-END:|153-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: ReportBugs ">//GEN-BEGIN:|150-getter|0|150-preInit
+    /**
+     * Returns an initiliazed instance of ReportBugs component.
+     * @return the initialized component instance
+     */
+    public Alert getReportBugs() {
+        if (ReportBugs == null) {//GEN-END:|150-getter|0|150-preInit
+            // write pre-init user code here
+            ReportBugs = new Alert("Report Bugs", "There we some exceptions during the program execution. Do you like to report them to improve the program quality?", getImage17(), AlertType.CONFIRMATION);//GEN-BEGIN:|150-getter|1|150-postInit
+            ReportBugs.addCommand(getReportBugsCommand());
+            ReportBugs.addCommand(getExitWOReportCommand());
+            ReportBugs.setCommandListener(this);
+            ReportBugs.setTimeout(Alert.FOREVER);//GEN-END:|150-getter|1|150-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|150-getter|2|
+        return ReportBugs;
+    }
+    //</editor-fold>//GEN-END:|150-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image17 ">//GEN-BEGIN:|157-getter|0|157-preInit
+    /**
+     * Returns an initiliazed instance of image17 component.
+     * @return the initialized component instance
+     */
+    public Image getImage17() {
+        if (image17 == null) {//GEN-END:|157-getter|0|157-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|157-getter|1|157-@java.io.IOException
+                image17 = Image.createImage("/images/bug.png");
+            } catch (java.io.IOException e) {//GEN-END:|157-getter|1|157-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|157-getter|2|157-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|157-getter|3|
+        return image17;
+    }
+    //</editor-fold>//GEN-END:|157-getter|3|
 
 
 
