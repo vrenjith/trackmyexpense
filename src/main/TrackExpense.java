@@ -5,10 +5,8 @@
 
 package main;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -20,8 +18,6 @@ import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
-import javax.wireless.messaging.MessageConnection;
-import javax.wireless.messaging.TextMessage;
 import org.netbeans.microedition.lcdui.WaitScreen;
 import org.netbeans.microedition.util.SimpleCancellableTask;
 
