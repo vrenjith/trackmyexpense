@@ -1,10 +1,10 @@
 MIDlet-1: TrackMyExpense,/images/appicon.png,main.TrackExpense
 MIDlet-Description: For tracking personal expenses using your mobile phone.
 MIDlet-Info-URL: http://code.google.com/p/trackmyexpense/
-MIDlet-Jar-Size: 105209
+MIDlet-Jar-Size: 105982
 MIDlet-Jar-URL: TrackExpenses.jar
 MIDlet-Name: TrackExpenses
 MIDlet-Vendor: Regy Inc
-MIDlet-Version: 0.0.65
+MIDlet-Version: 0.0.66
 MicroEdition-Configuration: CLDC-1.1
 MicroEdition-Profile: MIDP-2.0
