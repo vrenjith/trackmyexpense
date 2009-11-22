@@ -254,13 +254,8 @@
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R66"/>
                     </Component>
                     <Component componentID="75" typeID="C#CommandEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R166"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
                         <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R74"/>
-                        <Component componentID="166" typeID="C#SwitchDisplayableEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R75"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R164"/>
-                        </Component>
                     </Component>
                     <Component componentID="80" typeID="C#CommandEventSource">
                         <Property name="eventHandler" typeID="C#EventHandler" value="R81"/>
@@ -310,14 +305,14 @@
                             <Property name="string" typeID="Pjava.lang.String" value="VCash"/>
                             <Property name="selected" typeID="Pboolean" value="Vtrue"/>
                         </Component>
-                        <Component componentID="172" typeID="C#ChoiceElement">
-                            <Property name="string" typeID="Pjava.lang.String" value="VCredit Card"/>
+                        <Component componentID="174" typeID="C#ChoiceElement">
+                            <Property name="string" typeID="Pjava.lang.String" value="VSodexo Pass"/>
                         </Component>
                         <Component componentID="173" typeID="C#ChoiceElement">
                             <Property name="string" typeID="Pjava.lang.String" value="VDebt Card"/>
                         </Component>
-                        <Component componentID="174" typeID="C#ChoiceElement">
-                            <Property name="string" typeID="Pjava.lang.String" value="VSodexo Pass"/>
+                        <Component componentID="172" typeID="C#ChoiceElement">
+                            <Property name="string" typeID="Pjava.lang.String" value="VCredit Card"/>
                         </Component>
                     </Component>
                 </Component>
@@ -447,22 +442,6 @@
                         </Component>
                     </Component>
                 </Component>
-                <Component componentID="164" typeID="Corg.netbeans.microedition.lcdui.pda.FileBrowser">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VfileBrowser"/>
-                    <Property name="commands" typeID="1C#CommandEventSource" value="A1:4_R165"/>
-                    <Property name="title" typeID="Pjava.lang.String" value="VSelect File"/>
-                    <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
-                    <Property name="filter" typeID="Pjava.lang.String" value="V&lt;null&gt;"/>
-                    <Component componentID="165" typeID="C#FileBrowserOpenCommandEventSource">
-                        <Property name="eventHandler" typeID="C#EventHandler" value="R167"/>
-                        <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R164"/>
-                        <Property name="command" typeID="Cjavax.microedition.lcdui.Command" value="R50"/>
-                        <Component componentID="167" typeID="C#SwitchDisplayableEventHandler">
-                            <Property name="eventSource" typeID="C#EventSource" value="R165"/>
-                            <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R14"/>
-                        </Component>
-                    </Component>
-                </Component>
             </Component>
             <Component componentID="13" typeID="C#ResourcesCategory">
                 <Component componentID="111" typeID="Corg.netbeans.microedition.util.SimpleCancellableTask">
@@ -547,11 +526,10 @@
     <FlowScene version="1">
         <Node componentID="150" descriptorID="componentNode150" x="496" y="36"/>
         <Node componentID="91" descriptorID="componentNode91" x="116" y="433"/>
-        <Node componentID="164" descriptorID="componentNode164" x="535" y="538"/>
         <Node componentID="136" descriptorID="componentNode136" x="31" y="273"/>
-        <Node componentID="14" descriptorID="componentNode14" x="204" y="163"/>
         <Node componentID="56" descriptorID="componentNode56" x="509" y="191"/>
-        <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
         <Node componentID="85" descriptorID="componentNode85" x="333" y="437"/>
+        <Node componentID="14" descriptorID="componentNode14" x="204" y="163"/>
+        <Node componentID="2" descriptorID="componentNode2" x="24" y="26"/>
     </FlowScene>
 </VisualDesign>
