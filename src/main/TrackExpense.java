@@ -19,6 +19,7 @@ import javax.microedition.lcdui.*;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
 import org.netbeans.microedition.lcdui.WaitScreen;
+import org.netbeans.microedition.lcdui.pda.FileBrowser;
 import org.netbeans.microedition.util.SimpleCancellableTask;
 
 /**
@@ -52,14 +53,15 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Form form;
     private TextField amount;
     private TextField details;
-    private ChoiceGroup choiceGroup;
+    private ChoiceGroup catGroup;
     private DateField dateField;
+    private ChoiceGroup choiceGroup1;
     private List detailExpList;
     private List expSumList;
     private Alert About;
-    private WaitScreen waitScreen;
     private Alert Delete;
     private Alert ReportBugs;
+    private FileBrowser fileBrowser;
     private SimpleCancellableTask task;
     private Image image7;
     private Image image6;
@@ -351,139 +353,31 @@ private String URLEncode(String s)
                 // write pre-action user code here
                 switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|20|96-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|21|83-preAction
+            }//GEN-BEGIN:|7-commandAction|21|165-preAction
+        } else if (displayable == fileBrowser) {
+            if (command == FileBrowser.SELECT_FILE_COMMAND) {//GEN-END:|7-commandAction|21|165-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|22|165-postAction
+                // write post-action user code here
+                exportData(fileBrowser.getSelectedFileURL());
+            }//GEN-BEGIN:|7-commandAction|23|83-preAction
         } else if (displayable == form) {
-            if (command == aboutCommand) {//GEN-END:|7-commandAction|21|83-preAction
+            if (command == aboutCommand) {//GEN-END:|7-commandAction|23|83-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|22|83-postAction
+                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|24|83-postAction
                 // write post-action user code here
-            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|23|27-preAction
+            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|25|27-preAction
                     // write pre-action user code here
-//GEN-LINE:|7-commandAction|24|27-postAction
-                try
-                {
-                    if(0 != getAmount().getString().length())
-                    {
-                        //Date d = new Date();
-                        Calendar c = Calendar.getInstance();
-                        c.setTime(dateField.getDate());
-
-                        String dt = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH)+1) + "/" + c.get(Calendar.YEAR);
-
-                        String expense = dt + deLimiter + getAmount().getString().replace(deLimiter.charAt(0), '#')
-                                + deLimiter + getDetails().getString().replace(deLimiter.charAt(0), '#')
-                                + deLimiter + choiceGroup.getString(choiceGroup.getSelectedIndex()).replace(deLimiter.charAt(0), '#') ;
-                        RecordStore rs = RecordStore.openRecordStore("MyExpenses",true);
-                        rs.addRecord(expense.getBytes(),0,expense.length());
-
-                        String appt = "Accounted " + getAmount().getString() + " under " + choiceGroup.getString(choiceGroup.getSelectedIndex());
-                        Display.getDisplay(this).setCurrentItem(amount);
-                        amount.setString("");
-                        details.setString("");
-                        rs.closeRecordStore();
-                        showMsg(appt,"Information",AlertType.INFO);
-                    }
-                }
-                catch(Exception rse)
-                {
-                    reportBug(rse);
-                    showMsg("Can't write","Error", AlertType.ERROR);
-                }
-            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|25|149-preAction
+//GEN-LINE:|7-commandAction|26|27-postAction
+                   addExpense();
+            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|27|149-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|26|149-postAction
+//GEN-LINE:|7-commandAction|28|149-postAction
                 // write post-action user code here
-                try
-                {
-                    String currVersion = getAppProperty("MIDlet-Version");
-
-                    HttpConnection httpConn = null;
-                    String url = "http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jad";
-                    InputStream is = null;
-                    OutputStream os = null;
-
-                    try {
-                        // Open an HTTP Connection object
-                        httpConn = (HttpConnection) Connector.open(url);
-                        // Setup HTTP Request to POST
-                        httpConn.setRequestMethod(HttpConnection.GET);
-
-                        httpConn.setRequestProperty("User-Agent",
-                                "Profile/MIDP-1.0 Confirguration/CLDC-1.0");
-                        httpConn.setRequestProperty("Accept_Language", "en-US");
-                        //Content-Type is must to pass parameters in POST Request
-                        httpConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-
-                        os = httpConn.openOutputStream();
-
-                        /**Caution: os.flush() is controversial. It may create unexpected behavior
-                        on certain mobile devices. Try it out for your mobile device **/
-                        //os.flush();
-                        // Read Response from the Server
-                        StringBuffer sb = new StringBuffer();
-                        is = httpConn.openDataInputStream();
-                        int chr;
-                        while ((chr = is.read()) != -1) {
-                            sb.append((char) chr);
-                        }
-
-                        //Delete me
-                        //platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
-                        String strHtmlOut = sb.toString();
-                        String[] props = split(strHtmlOut,"\r\n");
-
-                        String newVersion = "";
-                        for(int nProp = 0; nProp < props.length; nProp++)
-                        {
-                            String[] cols = split(props[nProp],":");
-                            String key = cols[0];
-                            String value = cols[1];
-                            key = key.trim();
-                            value = value.trim();
-                            if("MIDlet-Version".equalsIgnoreCase(key))
-                            {
-                                newVersion = value;
-                                break;
-                            }
-                        }
-                        if(newVersion.length() >0)
-                        {
-                            if( !newVersion.equalsIgnoreCase(currVersion)
-                                    && (getVersionInt(newVersion) > getVersionInt(currVersion)))
-                            {
-                                exitMIDlet();
-                                platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
-                            }
-                            else
-                            {
-                                showMsg("You have already the latest version", "Update", AlertType.INFO);
-                            }
-                        }
-                        else
-                        {
-                            showMsg("Unable to determine the latest version", "Warning", AlertType.WARNING);
-                        }
-                    } finally {
-                        if (is != null) {
-                            is.close();
-                        }
-                        if (os != null) {
-                            os.close();
-                        }
-                        if (httpConn != null) {
-                            httpConn.close();
-                        }
-                    }
-
-                }
-                catch(Exception e){
-                    reportBug(e);
-                    showMsg("Unable to check for update.", "Error", AlertType.ERROR);
-                }
-            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|27|67-preAction
+                checkUpdate();
+            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|29|67-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|28|67-postAction
+//GEN-LINE:|7-commandAction|30|67-postAction
                 // write post-action user code here
                 if (RecordStore.listRecordStores() != null) {
                     try {
@@ -494,7 +388,7 @@ private String URLEncode(String s)
                         showMsg("Can't delete the datastore","Error", AlertType.ERROR);
                     }
                 }
-            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|29|19-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|31|19-preAction
                 // write pre-action user code here
                 if(exceptions.isEmpty())
                 {
@@ -502,87 +396,198 @@ private String URLEncode(String s)
                 }
                 else
                 {
-                    switchDisplayable(null, getReportBugs());//GEN-LINE:|7-commandAction|30|19-postAction
+                    switchDisplayable(null, getReportBugs());//GEN-LINE:|7-commandAction|32|19-postAction
                     // write post-action user code here
                 }
-            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|31|113-preAction
+            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|33|113-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|32|113-postAction
+                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|34|113-postAction
                 // write post-action user code here
                 fillExpensesDetails("");
-            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|33|80-preAction
+            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|35|80-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|34|80-postAction
+                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|36|80-postAction
                 // write post-action user code here
                 fillExpenseSummary();
-            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|35|75-preAction
+            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|37|75-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|36|75-postAction
+                switchDisplayable(null, getFileBrowser());//GEN-LINE:|7-commandAction|38|75-postAction
                 // write post-action user code here
-                RecordStore rs = null;
-                try {
-                    Date d = new Date();
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(d);
-                    String dt = c.get(Calendar.DAY_OF_MONTH) + "_" + (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.YEAR);
-                    String fileName = System.getProperty("fileconn.dir.memorycard") + "myexpenses_" + dt + ".csv";
-                    FileConnection fc = (FileConnection) Connector.open(fileName, Connector.READ_WRITE);
-                    if (!fc.exists()) {
-                        fc.create();
-                    } else {
-                        fc.delete();
-                        fc.create();
-                    }
-                    OutputStream is = fc.openOutputStream();
-
-                    rs = RecordStore.openRecordStore("MyExpenses", true);
-                    if (0 == rs.getNumRecords()) {
-                        showMsg("No records found", "Information", AlertType.INFO);
-                        if (null != rs) {
-                            rs.closeRecordStore();
-                        }
-                        return;
-                    }
-                    RecordEnumeration re = rs.enumerateRecords(null, null, false);
-
-                    is.write(("Date,Amount,Description,Category\n").getBytes());
-                    while (re.hasNextElement()) {
-                        String data = new String(re.nextRecord());
-                        String[] cols = split(data,deLimiter);
-                        data = "\"" + cols[0] + "\"," + cols[1] + ",\"" + cols[2] + "\",\"" + cols[3] + "\"\n";
-                        is.write((data).getBytes());
-                    }
-
-                    is.close();
-                    fc.close();
-                    showMsg("Exported as " + fileName,"Information", AlertType.INFO);
-                } catch (Exception e) {
-                    reportBug(e);
-                    showMsg("Failed to export","Error", AlertType.ERROR);
-                }
-                if (null != rs) {
-                    try {
-                        rs.closeRecordStore();
-                    } catch (Exception e) {
-                        reportBug(e);
-                    }
-                }
-            }//GEN-BEGIN:|7-commandAction|37|110-preAction
-        } else if (displayable == waitScreen) {
-            if (command == WaitScreen.FAILURE_COMMAND) {//GEN-END:|7-commandAction|37|110-preAction
-                // write pre-action user code here
-//GEN-LINE:|7-commandAction|38|110-postAction
-                // write post-action user code here
-            } else if (command == WaitScreen.SUCCESS_COMMAND) {//GEN-LINE:|7-commandAction|39|109-preAction
-                // write pre-action user code here
-//GEN-LINE:|7-commandAction|40|109-postAction
-                // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|41|7-postCommandAction
-        }//GEN-END:|7-commandAction|41|7-postCommandAction
+            }//GEN-BEGIN:|7-commandAction|39|7-postCommandAction
+        }//GEN-END:|7-commandAction|39|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|42|
-    //</editor-fold>//GEN-END:|7-commandAction|42|
+    }//GEN-BEGIN:|7-commandAction|40|
+    //</editor-fold>//GEN-END:|7-commandAction|40|
 
+    void checkUpdate()
+    {
+        try {
+            String currVersion = getAppProperty("MIDlet-Version");
+
+            HttpConnection httpConn = null;
+            String url = "http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jad";
+            InputStream is = null;
+            OutputStream os = null;
+
+            try {
+                // Open an HTTP Connection object
+                httpConn = (HttpConnection) Connector.open(url);
+                // Setup HTTP Request to POST
+                httpConn.setRequestMethod(HttpConnection.GET);
+
+                httpConn.setRequestProperty("User-Agent",
+                        "Profile/MIDP-1.0 Confirguration/CLDC-1.0");
+                httpConn.setRequestProperty("Accept_Language", "en-US");
+                //Content-Type is must to pass parameters in POST Request
+                httpConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+
+                os = httpConn.openOutputStream();
+
+                /**Caution: os.flush() is controversial. It may create unexpected behavior
+                on certain mobile devices. Try it out for your mobile device **/
+                //os.flush();
+                // Read Response from the Server
+                StringBuffer sb = new StringBuffer();
+                is = httpConn.openDataInputStream();
+                int chr;
+                while ((chr = is.read()) != -1) {
+                    sb.append((char) chr);
+                }
+
+                //Delete me
+                //platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
+                String strHtmlOut = sb.toString();
+                String[] props = split(strHtmlOut, "\r\n");
+
+                String newVersion = "";
+                for (int nProp = 0; nProp < props.length; nProp++) {
+                    String[] cols = split(props[nProp], ":");
+                    String key = cols[0];
+                    String value = cols[1];
+                    key = key.trim();
+                    value = value.trim();
+                    if ("MIDlet-Version".equalsIgnoreCase(key)) {
+                        newVersion = value;
+                        break;
+                    }
+                }
+                if (newVersion.length() > 0) {
+                    if (!newVersion.equalsIgnoreCase(currVersion) && (getVersionInt(newVersion) > getVersionInt(currVersion))) {
+                        exitMIDlet();
+                        platformRequest("http://trackmyexpense.googlecode.com/svn/trunk/distribution/S60Emulator/TrackExpenses.jar");
+                    } else {
+                        showMsg("You have already the latest version", "Update", AlertType.INFO);
+                    }
+                } else {
+                    showMsg("Unable to determine the latest version", "Warning", AlertType.WARNING);
+                }
+            } finally {
+                if (is != null) {
+                    is.close();
+                }
+                if (os != null) {
+                    os.close();
+                }
+                if (httpConn != null) {
+                    httpConn.close();
+                }
+            }
+
+        } catch (Exception e) {
+            reportBug(e);
+            showMsg("Unable to check for update.", "Error", AlertType.ERROR);
+        }
+    }
+    void addExpense() {
+        try {
+            if (0 != getAmount().getString().length()) {
+                //Date d = new Date();
+                Calendar c = Calendar.getInstance();
+                c.setTime(dateField.getDate());
+
+                String dt = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+
+                String expense = dt + deLimiter + getAmount().getString().replace(deLimiter.charAt(0), '#') 
+                        + deLimiter + getDetails().getString().replace(deLimiter.charAt(0), '#') + deLimiter +
+                        catGroup.getString(catGroup.getSelectedIndex()).replace(deLimiter.charAt(0), '#') +
+                        deLimiter + choiceGroup1.getString(choiceGroup1.getSelectedIndex());
+
+                RecordStore rs = RecordStore.openRecordStore("MyExpenses", true);
+                rs.addRecord(expense.getBytes(), 0, expense.length());
+
+                String appt = "Accounted " + getAmount().getString() + " under " + catGroup.getString(catGroup.getSelectedIndex());
+                Display.getDisplay(this).setCurrentItem(amount);
+                amount.setString("");
+                details.setString("");
+                rs.closeRecordStore();
+                showMsg(appt, "Information", AlertType.INFO);
+            }
+        } catch (Exception rse) {
+            reportBug(rse);
+            showMsg("Can't write", "Error", AlertType.ERROR);
+        }
+    }
+void exportData(String file)
+ {
+        //System.getProperty("fileconn.dir.memorycard") + "myexpenses_" + dt + ".csv"
+        RecordStore rs = null;
+        try {
+            Date d = new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime(d);
+            String dt = c.get(Calendar.DAY_OF_MONTH) + "_" + (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.YEAR);
+            String fileName = file;
+            FileConnection fc = (FileConnection) Connector.open(fileName, Connector.READ_WRITE);
+            if (!fc.exists()) {
+                fc.create();
+            } else {
+                fc.delete();
+                fc.create();
+            }
+            OutputStream is = fc.openOutputStream();
+
+            rs = RecordStore.openRecordStore("MyExpenses", true);
+            if (0 == rs.getNumRecords()) {
+                showMsg("No records found", "Information", AlertType.INFO);
+                if (null != rs) {
+                    rs.closeRecordStore();
+                }
+                return;
+            }
+            RecordEnumeration re = rs.enumerateRecords(null, null, false);
+
+            is.write(("Date,Amount,Description,Category,PaymentType\n").getBytes());
+            while (re.hasNextElement()) {
+                String data = new String(re.nextRecord());
+                String[] cols = split(data, deLimiter);
+                data = "\"" + cols[0] + "\"," + cols[1] + ",\"" + cols[2] + "\",\"" + cols[3] + "\"";
+                if(cols.length > 4 )
+                {
+                    data += "," + cols[4] + "\n";
+                }
+                else
+                {
+                    data += "\n";
+                }
+                is.write((data).getBytes());
+            }
+
+            is.close();
+            fc.close();
+            showMsg("Exported as " + fileName, "Information", AlertType.INFO);
+        } catch (Exception e) {
+            reportBug(e);
+            showMsg("Failed to export", "Error", AlertType.ERROR);
+        }
+        if (null != rs) {
+            try {
+                rs.closeRecordStore();
+            } catch (Exception e) {
+                reportBug(e);
+            }
+        }
+    }
 int getVersionInt(String str)
 {
     String[] cols = split(str,".");
@@ -618,7 +623,7 @@ public Command getExitCommand() {
 public Form getForm() {
     if (form == null) {//GEN-END:|14-getter|0|14-preInit
             // write pre-init user code here
-        form = new Form("TrackExpense", new Item[] { getAmount(), getDetails(), getChoiceGroup(), getDateField() });//GEN-BEGIN:|14-getter|1|14-postInit
+        form = new Form("TrackExpense", new Item[] { getAmount(), getDetails(), getCatGroup(), getDateField(), getChoiceGroup1() });//GEN-BEGIN:|14-getter|1|14-postInit
         form.addCommand(getExitCommand());
         form.addCommand(getAddExpenseCommand());
         form.addCommand(getExpenseDetailsCommand());
@@ -683,36 +688,37 @@ public Command getAddExpenseCommand() {
     return addExpenseCommand;
 }
 //</editor-fold>//GEN-END:|26-getter|2|
+//</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc=" Generated Getter: choiceGroup ">//GEN-BEGIN:|29-getter|0|29-preInit
+//<editor-fold defaultstate="collapsed" desc=" Generated Getter: catGroup ">//GEN-BEGIN:|29-getter|0|29-preInit
 /**
- * Returns an initiliazed instance of choiceGroup component.
+ * Returns an initiliazed instance of catGroup component.
  * @return the initialized component instance
  */
-public ChoiceGroup getChoiceGroup() {
-    if (choiceGroup == null) {//GEN-END:|29-getter|0|29-preInit
+public ChoiceGroup getCatGroup() {
+    if (catGroup == null) {//GEN-END:|29-getter|0|29-preInit
             // write pre-init user code here
-        choiceGroup = new ChoiceGroup("Category", Choice.POPUP);//GEN-BEGIN:|29-getter|1|29-postInit
-        choiceGroup.append("Travel", getImage());
-        choiceGroup.append("Petrol", getImage15());
-        choiceGroup.append("Groceries", getImage1());
-        choiceGroup.append("Vegetables", getImage2());
-        choiceGroup.append("Apparels", getImage3());
-        choiceGroup.append("Eat out", getImage4());
-        choiceGroup.append("Medical", getImage5());
-        choiceGroup.append("Phone/Water/Elec", getImage6());
-        choiceGroup.append("Child/School", getImage7());
-        choiceGroup.append("Vehicle", getImage8());
-        choiceGroup.append("Home Improvement", getImage9());
-        choiceGroup.append("Loan", getImage10());
-        choiceGroup.append("Investment", getImage11());
-        choiceGroup.append("Movie/Entertainment", getImage12());
-        choiceGroup.append("Donation/Offerings", getImage13());
-        choiceGroup.append("Other", getImage14());
-        choiceGroup.setSelectedFlags(new boolean[] { false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false });//GEN-END:|29-getter|1|29-postInit
+        catGroup = new ChoiceGroup("Category", Choice.POPUP);//GEN-BEGIN:|29-getter|1|29-postInit
+        catGroup.append("Travel", getImage());
+        catGroup.append("Petrol", getImage15());
+        catGroup.append("Groceries", getImage1());
+        catGroup.append("Vegetables", getImage2());
+        catGroup.append("Apparels", getImage3());
+        catGroup.append("Eat out", getImage4());
+        catGroup.append("Medical", getImage5());
+        catGroup.append("Phone/Water/Elec", getImage6());
+        catGroup.append("Child/School", getImage7());
+        catGroup.append("Vehicle", getImage8());
+        catGroup.append("Home Improvement", getImage9());
+        catGroup.append("Loan", getImage10());
+        catGroup.append("Investment", getImage11());
+        catGroup.append("Movie/Entertainment", getImage12());
+        catGroup.append("Donation/Offerings", getImage13());
+        catGroup.append("Other", getImage14());
+        catGroup.setSelectedFlags(new boolean[] { false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false });//GEN-END:|29-getter|1|29-postInit
             // write post-init user code here
     }//GEN-BEGIN:|29-getter|2|
-    return choiceGroup;
+    return catGroup;
 }
 //</editor-fold>//GEN-END:|29-getter|2|
 
@@ -773,12 +779,24 @@ public List getDetailExpList() {
         }
         return result;
     }
+    void sort(String[] a) {
+        for (int i = 0; i < a.length - 1; i++) {
+            for (int j = i + 1; j < a.length; j++) {
+                if (a[i].compareTo(a[j]) > 0) {
+                    String temp = a[j];
+                    a[j] = a[i];
+                    a[i] = temp;
+                }
+            }
+        }
+    }
 
     private void fillExpenseSummary()
     {
         //Display.getDisplay(this).setCurrent(waitScreen);
         Hashtable catExp = new Hashtable();
         RecordStore rs = null;
+        int totalExp = 0;
         try {
             expSumList.deleteAll();
             if (null == rs) {
@@ -808,13 +826,23 @@ public List getDetailExpList() {
                 }
                 catExp.put(cols[3], catSum);
             }
+            String[] keys = new String[catExp.size()];
             Enumeration en = catExp.keys();
-            while (en.hasMoreElements())
+
+            for(int keyCount = 0;en.hasMoreElements(); keyCount++)
             {
                 String key = (String)en.nextElement();
-                Integer sum = (Integer)catExp.get(key);
-                expSumList.append(key + " : " + sum, null);
+                keys[keyCount] = key;
             }
+            sort(keys);
+            for(int keyCount = 0;keyCount < keys.length; keyCount++)
+            {
+                Integer sum = (Integer)catExp.get(keys[keyCount]);
+                totalExp += sum.intValue();
+                expSumList.append(keys[keyCount] + " : " + sum, null);
+            }
+            expSumList.append("---------", null);
+            expSumList.append("Total : " + totalExp, null);
 
         } catch (Exception e) {
             reportBug(e);
@@ -1059,23 +1087,7 @@ public List getDetailExpList() {
     }
     //</editor-fold>//GEN-END:|104-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: waitScreen ">//GEN-BEGIN:|106-getter|0|106-preInit
-    /**
-     * Returns an initiliazed instance of waitScreen component.
-     * @return the initialized component instance
-     */
-    public WaitScreen getWaitScreen() {
-        if (waitScreen == null) {//GEN-END:|106-getter|0|106-preInit
-            // write pre-init user code here
-            waitScreen = new WaitScreen(getDisplay());//GEN-BEGIN:|106-getter|1|106-postInit
-            waitScreen.setTitle("Loading...");
-            waitScreen.setCommandListener(this);
-            waitScreen.setTask(getTask());//GEN-END:|106-getter|1|106-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|106-getter|2|
-        return waitScreen;
-    }
-    //</editor-fold>//GEN-END:|106-getter|2|
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: task ">//GEN-BEGIN:|111-getter|0|111-preInit
     /**
@@ -1583,6 +1595,45 @@ public List getDetailExpList() {
         return image17;
     }
     //</editor-fold>//GEN-END:|157-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: fileBrowser ">//GEN-BEGIN:|164-getter|0|164-preInit
+    /**
+     * Returns an initiliazed instance of fileBrowser component.
+     * @return the initialized component instance
+     */
+    public FileBrowser getFileBrowser() {
+        if (fileBrowser == null) {//GEN-END:|164-getter|0|164-preInit
+            // write pre-init user code here
+            fileBrowser = new FileBrowser(getDisplay());//GEN-BEGIN:|164-getter|1|164-postInit
+            fileBrowser.setTitle("Select File");
+            fileBrowser.setCommandListener(this);
+            fileBrowser.setFilter("<null>");
+            fileBrowser.addCommand(FileBrowser.SELECT_FILE_COMMAND);//GEN-END:|164-getter|1|164-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|164-getter|2|
+        return fileBrowser;
+    }
+    //</editor-fold>//GEN-END:|164-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: choiceGroup1 ">//GEN-BEGIN:|170-getter|0|170-preInit
+    /**
+     * Returns an initiliazed instance of choiceGroup1 component.
+     * @return the initialized component instance
+     */
+    public ChoiceGroup getChoiceGroup1() {
+        if (choiceGroup1 == null) {//GEN-END:|170-getter|0|170-preInit
+            // write pre-init user code here
+            choiceGroup1 = new ChoiceGroup("Payment Type", Choice.EXCLUSIVE);//GEN-BEGIN:|170-getter|1|170-postInit
+            choiceGroup1.append("Cash", null);
+            choiceGroup1.append("Credit Card", null);
+            choiceGroup1.append("Debt Card", null);
+            choiceGroup1.append("Sodexo Pass", null);
+            choiceGroup1.setSelectedFlags(new boolean[] { true, false, false, false });//GEN-END:|170-getter|1|170-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|170-getter|2|
+        return choiceGroup1;
+    }
+    //</editor-fold>//GEN-END:|170-getter|2|
 
 
 
