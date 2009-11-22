@@ -18,9 +18,9 @@ import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
-import org.netbeans.microedition.lcdui.WaitScreen;
 import org.netbeans.microedition.lcdui.pda.FileBrowser;
 import org.netbeans.microedition.util.SimpleCancellableTask;
+
 
 /**
  * @author Z000DG8C
@@ -61,7 +61,6 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Alert About;
     private Alert Delete;
     private Alert ReportBugs;
-    private FileBrowser fileBrowser;
     private SimpleCancellableTask task;
     private Image image7;
     private Image image6;
@@ -353,31 +352,24 @@ private String URLEncode(String s)
                 // write pre-action user code here
                 switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|20|96-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|21|165-preAction
-        } else if (displayable == fileBrowser) {
-            if (command == FileBrowser.SELECT_FILE_COMMAND) {//GEN-END:|7-commandAction|21|165-preAction
-                // write pre-action user code here
-                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|22|165-postAction
-                // write post-action user code here
-                exportData(fileBrowser.getSelectedFileURL());
-            }//GEN-BEGIN:|7-commandAction|23|83-preAction
+            }//GEN-BEGIN:|7-commandAction|21|83-preAction
         } else if (displayable == form) {
-            if (command == aboutCommand) {//GEN-END:|7-commandAction|23|83-preAction
+            if (command == aboutCommand) {//GEN-END:|7-commandAction|21|83-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|24|83-postAction
+                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|22|83-postAction
                 // write post-action user code here
-            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|25|27-preAction
+            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|23|27-preAction
                     // write pre-action user code here
-//GEN-LINE:|7-commandAction|26|27-postAction
+//GEN-LINE:|7-commandAction|24|27-postAction
                    addExpense();
-            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|27|149-preAction
+            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|25|149-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|28|149-postAction
+//GEN-LINE:|7-commandAction|26|149-postAction
                 // write post-action user code here
                 checkUpdate();
-            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|29|67-preAction
+            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|27|67-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|30|67-postAction
+//GEN-LINE:|7-commandAction|28|67-postAction
                 // write post-action user code here
                 if (RecordStore.listRecordStores() != null) {
                     try {
@@ -388,7 +380,7 @@ private String URLEncode(String s)
                         showMsg("Can't delete the datastore","Error", AlertType.ERROR);
                     }
                 }
-            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|31|19-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|29|19-preAction
                 // write pre-action user code here
                 if(exceptions.isEmpty())
                 {
@@ -396,28 +388,30 @@ private String URLEncode(String s)
                 }
                 else
                 {
-                    switchDisplayable(null, getReportBugs());//GEN-LINE:|7-commandAction|32|19-postAction
+                    switchDisplayable(null, getReportBugs());//GEN-LINE:|7-commandAction|30|19-postAction
                     // write post-action user code here
                 }
-            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|33|113-preAction
+            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|31|113-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|34|113-postAction
+                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|32|113-postAction
                 // write post-action user code here
                 fillExpensesDetails("");
-            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|35|80-preAction
+            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|33|80-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|36|80-postAction
+                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|34|80-postAction
                 // write post-action user code here
                 fillExpenseSummary();
-            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|37|75-preAction
+            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|35|75-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getFileBrowser());//GEN-LINE:|7-commandAction|38|75-postAction
+//GEN-LINE:|7-commandAction|36|75-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|39|7-postCommandAction
-        }//GEN-END:|7-commandAction|39|7-postCommandAction
+                exportData("");
+            }//GEN-BEGIN:|7-commandAction|37|7-postCommandAction
+        }//GEN-END:|7-commandAction|37|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|40|
-    //</editor-fold>//GEN-END:|7-commandAction|40|
+    }//GEN-BEGIN:|7-commandAction|38|
+    //</editor-fold>//GEN-END:|7-commandAction|38|
+
 
     void checkUpdate()
     {
@@ -530,14 +524,14 @@ private String URLEncode(String s)
     }
 void exportData(String file)
  {
-        //System.getProperty("fileconn.dir.memorycard") + "myexpenses_" + dt + ".csv"
         RecordStore rs = null;
         try {
             Date d = new Date();
             Calendar c = Calendar.getInstance();
             c.setTime(d);
             String dt = c.get(Calendar.DAY_OF_MONTH) + "_" + (c.get(Calendar.MONTH) + 1) + "_" + c.get(Calendar.YEAR);
-            String fileName = file;
+            String fileName = System.getProperty("fileconn.dir.memorycard") + "myexpenses_" + dt + ".csv";
+
             FileConnection fc = (FileConnection) Connector.open(fileName, Connector.READ_WRITE);
             if (!fc.exists()) {
                 fc.create();
@@ -791,11 +785,23 @@ public List getDetailExpList() {
         }
     }
 
+    private Date parseDate(String str)
+    {
+        Calendar c = Calendar.getInstance();
+        String[] cols = split(str, "/");
+        c.set(Calendar.DATE,Integer.parseInt(cols[0]));
+        c.set(Calendar.MONTH,Integer.parseInt(cols[1]));
+        c.set(Calendar.YEAR,Integer.parseInt(cols[3]));
+        return c.getTime();
+    }
+
     private void fillExpenseSummary()
     {
         //Display.getDisplay(this).setCurrent(waitScreen);
         Hashtable catExp = new Hashtable();
         RecordStore rs = null;
+        Date startDate = new Date();
+        Date endDate = new Date();
         int totalExp = 0;
         try {
             expSumList.deleteAll();
@@ -825,6 +831,18 @@ public List getDetailExpList() {
                     catSum = new Integer(Integer.parseInt(cols[1]));
                 }
                 catExp.put(cols[3], catSum);
+                Date rowDate = parseDate(cols[0]);
+                Calendar c = Calendar.getInstance();
+                c.setTime(rowDate);
+                if(c.before(startDate))
+                {
+                    startDate = rowDate;
+                }
+
+                if(c.after(endDate))
+                {
+                    endDate = rowDate;
+                }
             }
             String[] keys = new String[catExp.size()];
             Enumeration en = catExp.keys();
@@ -841,6 +859,16 @@ public List getDetailExpList() {
                 totalExp += sum.intValue();
                 expSumList.append(keys[keyCount] + " : " + sum, null);
             }
+            Calendar c = Calendar.getInstance();
+            c.setTime(startDate);
+
+            String startString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+
+            c.setTime(endDate);
+            String endString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+
+            expSumList.insert(0,"[" + startString + "]-[" + endString + "]" , null);
+            expSumList.insert(1,"---------", null);
             expSumList.append("---------", null);
             expSumList.append("Total : " + totalExp, null);
 
@@ -1596,24 +1624,7 @@ public List getDetailExpList() {
     }
     //</editor-fold>//GEN-END:|157-getter|3|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: fileBrowser ">//GEN-BEGIN:|164-getter|0|164-preInit
-    /**
-     * Returns an initiliazed instance of fileBrowser component.
-     * @return the initialized component instance
-     */
-    public FileBrowser getFileBrowser() {
-        if (fileBrowser == null) {//GEN-END:|164-getter|0|164-preInit
-            // write pre-init user code here
-            fileBrowser = new FileBrowser(getDisplay());//GEN-BEGIN:|164-getter|1|164-postInit
-            fileBrowser.setTitle("Select File");
-            fileBrowser.setCommandListener(this);
-            fileBrowser.setFilter("<null>");
-            fileBrowser.addCommand(FileBrowser.SELECT_FILE_COMMAND);//GEN-END:|164-getter|1|164-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|164-getter|2|
-        return fileBrowser;
-    }
-    //</editor-fold>//GEN-END:|164-getter|2|
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: choiceGroup1 ">//GEN-BEGIN:|170-getter|0|170-preInit
     /**
