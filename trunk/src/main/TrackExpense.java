@@ -834,17 +834,18 @@ public List getDetailExpList() {
 
                 try
                 {
-                Date rowDate = parseDate(cols[0]);
-                Calendar c = Calendar.getInstance();
-                c.setTime(rowDate);
-                if(c.before(startDate))
-                {
-                    startDate = rowDate;
-                }
+                    Date rowDate = parseDate(cols[0]);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(rowDate);
+                    if(c.before(startDate))
+                    {
+                        startDate = rowDate;
+                    }
 
-                if(c.after(endDate))
-                {
-                    endDate = rowDate;
+                    if(c.after(endDate))
+                    {
+                        endDate = rowDate;
+                    }
                 }
                 catch(Exception e){}
             }
