@@ -791,7 +791,7 @@ public List getDetailExpList() {
         String[] cols = split(str, "/");
         c.set(Calendar.DATE,Integer.parseInt(cols[0]));
         c.set(Calendar.MONTH,Integer.parseInt(cols[1]));
-        c.set(Calendar.YEAR,Integer.parseInt(cols[3]));
+        c.set(Calendar.YEAR,Integer.parseInt(cols[2]));
         return c.getTime();
     }
 
@@ -831,6 +831,9 @@ public List getDetailExpList() {
                     catSum = new Integer(Integer.parseInt(cols[1]));
                 }
                 catExp.put(cols[3], catSum);
+
+                try
+                {
                 Date rowDate = parseDate(cols[0]);
                 Calendar c = Calendar.getInstance();
                 c.setTime(rowDate);
@@ -843,6 +846,7 @@ public List getDetailExpList() {
                 {
                     endDate = rowDate;
                 }
+                catch(Exception e){}
             }
             String[] keys = new String[catExp.size()];
             Enumeration en = catExp.keys();
@@ -859,16 +863,20 @@ public List getDetailExpList() {
                 totalExp += sum.intValue();
                 expSumList.append(keys[keyCount] + " : " + sum, null);
             }
-            Calendar c = Calendar.getInstance();
-            c.setTime(startDate);
+            try
+            {
+                Calendar c = Calendar.getInstance();
+                c.setTime(startDate);
 
-            String startString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+                String startString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
 
-            c.setTime(endDate);
-            String endString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+                c.setTime(endDate);
+                String endString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
 
-            expSumList.insert(0,"[" + startString + "]-[" + endString + "]" , null);
-            expSumList.insert(1,"---------", null);
+                expSumList.insert(0,"[" + startString + "]-[" + endString + "]" , null);
+                expSumList.insert(1,"---------", null);
+            }
+            catch(Exception e){}
             expSumList.append("---------", null);
             expSumList.append("Total : " + totalExp, null);
 
