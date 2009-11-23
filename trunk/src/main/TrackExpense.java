@@ -18,6 +18,7 @@ import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
+import org.netbeans.microedition.lcdui.WaitScreen;
 import org.netbeans.microedition.lcdui.pda.FileBrowser;
 import org.netbeans.microedition.util.SimpleCancellableTask;
 
@@ -61,7 +62,6 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Alert About;
     private Alert Delete;
     private Alert ReportBugs;
-    private SimpleCancellableTask task;
     private Image image7;
     private Image image6;
     private Image image5;
@@ -80,6 +80,8 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Image image15;
     private Image image14;
     private Image image17;
+    private Image image18;
+    private SimpleCancellableTask simpleCancellableTask;
     //</editor-fold>//GEN-END:|fields|0|
 
     private void showMsg(String msg,String title, AlertType type)
@@ -411,6 +413,7 @@ private String URLEncode(String s)
         // write post-action user code here
     }//GEN-BEGIN:|7-commandAction|38|
     //</editor-fold>//GEN-END:|7-commandAction|38|
+
 
 
     void checkUpdate()
@@ -788,16 +791,18 @@ public List getDetailExpList() {
     private Date parseDate(String str)
     {
         Calendar c = Calendar.getInstance();
+        Date sD = new Date();
+        c.setTime(sD);
         String[] cols = split(str, "/");
         c.set(Calendar.DATE,Integer.parseInt(cols[0]));
         c.set(Calendar.MONTH,Integer.parseInt(cols[1]));
         c.set(Calendar.YEAR,Integer.parseInt(cols[2]));
-        return c.getTime();
+        Date finalD = c.getTime();
+        return finalD;
     }
 
     private void fillExpenseSummary()
     {
-        //Display.getDisplay(this).setCurrent(waitScreen);
         Hashtable catExp = new Hashtable();
         RecordStore rs = null;
         Date startDate = new Date();
@@ -831,23 +836,6 @@ public List getDetailExpList() {
                     catSum = new Integer(Integer.parseInt(cols[1]));
                 }
                 catExp.put(cols[3], catSum);
-
-                try
-                {
-                    Date rowDate = parseDate(cols[0]);
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(rowDate);
-                    if(c.before(startDate))
-                    {
-                        startDate = rowDate;
-                    }
-
-                    if(c.after(endDate))
-                    {
-                        endDate = rowDate;
-                    }
-                }
-                catch(Exception e){}
             }
             String[] keys = new String[catExp.size()];
             Enumeration en = catExp.keys();
@@ -864,20 +852,20 @@ public List getDetailExpList() {
                 totalExp += sum.intValue();
                 expSumList.append(keys[keyCount] + " : " + sum, null);
             }
-            try
-            {
-                Calendar c = Calendar.getInstance();
-                c.setTime(startDate);
-
-                String startString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
-
-                c.setTime(endDate);
-                String endString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
-
-                expSumList.insert(0,"[" + startString + "]-[" + endString + "]" , null);
-                expSumList.insert(1,"---------", null);
-            }
-            catch(Exception e){}
+//            try
+//            {
+//                Calendar c = Calendar.getInstance();
+//                c.setTime(startDate);
+//
+//                String startString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+//
+//                c.setTime(endDate);
+//                String endString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+//
+//                expSumList.insert(0,"[" + startString + "]-[" + endString + "]" , null);
+//                expSumList.insert(1,"---------", null);
+//            }
+//            catch(Exception e){}
             expSumList.append("---------", null);
             expSumList.append("Total : " + totalExp, null);
 
@@ -1126,25 +1114,7 @@ public List getDetailExpList() {
 
 
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: task ">//GEN-BEGIN:|111-getter|0|111-preInit
-    /**
-     * Returns an initiliazed instance of task component.
-     * @return the initialized component instance
-     */
-    public SimpleCancellableTask getTask() {
-        if (task == null) {//GEN-END:|111-getter|0|111-preInit
-            // write pre-init user code here
-            task = new SimpleCancellableTask();//GEN-BEGIN:|111-getter|1|111-execute
-            task.setExecutable(new org.netbeans.microedition.util.Executable() {
-                public void execute() throws Exception {//GEN-END:|111-getter|1|111-execute
-                    // write task-execution user code here
-                }//GEN-BEGIN:|111-getter|2|111-postInit
-            });//GEN-END:|111-getter|2|111-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|111-getter|3|
-        return task;
-    }
-    //</editor-fold>//GEN-END:|111-getter|3|
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: expenseDetailsCommand ">//GEN-BEGIN:|112-getter|0|112-preInit
     /**
@@ -1654,6 +1624,50 @@ public List getDetailExpList() {
         return choiceGroup1;
     }
     //</editor-fold>//GEN-END:|170-getter|2|
+
+
+
+
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image18 ">//GEN-BEGIN:|179-getter|0|179-preInit
+    /**
+     * Returns an initiliazed instance of image18 component.
+     * @return the initialized component instance
+     */
+    public Image getImage18() {
+        if (image18 == null) {//GEN-END:|179-getter|0|179-preInit
+            // write pre-init user code here
+            try {//GEN-BEGIN:|179-getter|1|179-@java.io.IOException
+                image18 = Image.createImage("/images/appicon.png");
+            } catch (java.io.IOException e) {//GEN-END:|179-getter|1|179-@java.io.IOException
+                e.printStackTrace();
+            }//GEN-LINE:|179-getter|2|179-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|179-getter|3|
+        return image18;
+    }
+    //</editor-fold>//GEN-END:|179-getter|3|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: simpleCancellableTask ">//GEN-BEGIN:|183-getter|0|183-preInit
+    /**
+     * Returns an initiliazed instance of simpleCancellableTask component.
+     * @return the initialized component instance
+     */
+    public SimpleCancellableTask getSimpleCancellableTask() {
+        if (simpleCancellableTask == null) {//GEN-END:|183-getter|0|183-preInit
+            // write pre-init user code here
+            simpleCancellableTask = new SimpleCancellableTask();//GEN-BEGIN:|183-getter|1|183-execute
+            simpleCancellableTask.setExecutable(new org.netbeans.microedition.util.Executable() {
+                public void execute() throws Exception {//GEN-END:|183-getter|1|183-execute
+                    // write task-execution user code here
+                    fillExpenseSummary();
+                }//GEN-BEGIN:|183-getter|2|183-postInit
+            });//GEN-END:|183-getter|2|183-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|183-getter|3|
+        return simpleCancellableTask;
+    }
+    //</editor-fold>//GEN-END:|183-getter|3|
 
 
 
