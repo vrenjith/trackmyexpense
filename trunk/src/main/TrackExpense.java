@@ -18,6 +18,10 @@ import javax.microedition.midlet.*;
 import javax.microedition.lcdui.*;
 import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
+import org.netbeans.microedition.lcdui.SimpleTableModel;
+import org.netbeans.microedition.lcdui.TableItem;
+import org.netbeans.microedition.lcdui.TableModel;
+import org.netbeans.microedition.lcdui.TableModelListener;
 import org.netbeans.microedition.lcdui.WaitScreen;
 import org.netbeans.microedition.lcdui.pda.FileBrowser;
 import org.netbeans.microedition.util.SimpleCancellableTask;
@@ -51,6 +55,10 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Command exitWOReportCommand;
     private Command checkUpdateCommand;
     private Command reportBugsCommand;
+    private Command exitCommand1;
+    private Command hideCommand;
+    private Command exitCommand2;
+    private Command backCommand1;
     private Form form;
     private TextField amount;
     private TextField details;
@@ -62,6 +70,11 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Alert About;
     private Alert Delete;
     private Alert ReportBugs;
+    private Form expSumForm;
+    private TableItem expensesTableItem;
+    private TextField startDateTextField;
+    private TextField endDateTextField;
+    private TextField totalExpenseTextField;
     private Image image7;
     private Image image6;
     private Image image5;
@@ -82,6 +95,7 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Image image17;
     private Image image18;
     private SimpleCancellableTask simpleCancellableTask;
+    private SimpleTableModel simpleTableModel;
     //</editor-fold>//GEN-END:|fields|0|
 
     private void showMsg(String msg,String title, AlertType type)
@@ -187,6 +201,37 @@ private String URLEncode(String s)
     public TrackExpense() {
     }
 
+    private void fillDummyData()
+  {
+        try {
+            try {
+                RecordStore.deleteRecordStore("MyExpenses");
+            } catch (Exception e) {
+            }
+            RecordStore rs = RecordStore.openRecordStore("MyExpenses", true);
+            String rec = "";
+
+            rec = "12/11/2009^900^Amma burn^Medical";
+            rs.addRecord(rec.getBytes(), 0, rec.length());
+            rec = "13/11/2009^62^Pril etc.^Groceries";
+            rs.addRecord(rec.getBytes(), 0, rec.length());
+            rec = "13/11/2009^68^Vegetables^Groceries";
+            rs.addRecord(rec.getBytes(), 0, rec.length());
+            
+            rec = "16/11/2009^20^Banana^Vegetables";
+            rs.addRecord(rec.getBytes(), 0, rec.length());
+            rec = "17/11/2009^120^Amma dressing^Medical";
+            rs.addRecord(rec.getBytes(), 0, rec.length());
+            rec = "17/11/2009^300^Car, Kothanur^Petrol";
+            rs.addRecord(rec.getBytes(), 0, rec.length());
+
+            rs.addRecord(rec.getBytes(), 0, rec.length());
+            rec = "18/11/2009^115^Horticorp,Fruits^Vegetables";
+            rs.addRecord(rec.getBytes(), 0, rec.length());
+        } catch (Exception e) {
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
     //</editor-fold>//GEN-END:|methods|0|
 
@@ -259,7 +304,7 @@ private String URLEncode(String s)
                 switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|4|142-postAction
                 // write post-action user code here
                 try {
-                    int nIndex = getDetailExpList().getSelectedIndex();
+                    int nIndex = getExpensesTableItem().getSelectedCellRow();
                     if (nIndex >= 0) {
                         RecordStore rs = RecordStore.openRecordStore("MyExpenses", true);
                         int nRecIndex = currIndices[nIndex];
@@ -311,7 +356,7 @@ private String URLEncode(String s)
                 // write post-action user code here
             } else if (command == deleteExpense) {//GEN-LINE:|7-commandAction|11|118-preAction
                 // write pre-action user code here
-                int nIndex = getExpSumList().getSelectedIndex();
+                int nIndex = getExpensesTableItem().getSelectedCellRow();
                 if (nIndex >= 0) {
                     switchDisplayable(null, getDelete());//GEN-LINE:|7-commandAction|12|118-postAction
                     // write post-action user code here
@@ -325,13 +370,27 @@ private String URLEncode(String s)
                 }
                 else {
                     fillExpenseSummary();
-                    switchDisplayable(null, getExpSumList());
+                    switchDisplayable(null, getExpSumForm());
                 }
-            }//GEN-BEGIN:|7-commandAction|15|86-preAction
-        } else if (displayable == expSumList) {
-            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|15|86-preAction
+            }//GEN-BEGIN:|7-commandAction|15|207-preAction
+        } else if (displayable == expSumForm) {
+            if (command == detailsExpensesCommand) {//GEN-END:|7-commandAction|15|207-preAction
                 // write pre-action user code here
-                expSumListAction();//GEN-LINE:|7-commandAction|16|86-postAction
+                int nIndex = getExpensesTableItem().getSelectedCellRow();
+                if(nIndex >=0){
+                    switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|16|207-postAction
+                // write post-action user code here
+                    String currEntry = (String)getSimpleTableModel().getValue(0,nIndex);
+                    fillExpensesDetails(currEntry);                }
+            } else if (command == returnCommand) {//GEN-LINE:|7-commandAction|17|205-preAction
+                // write pre-action user code here
+                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|18|205-postAction
+                // write post-action user code here
+            }//GEN-BEGIN:|7-commandAction|19|86-preAction
+        } else if (displayable == expSumList) {
+            if (command == List.SELECT_COMMAND) {//GEN-END:|7-commandAction|19|86-preAction
+                // write pre-action user code here
+                expSumListAction();//GEN-LINE:|7-commandAction|20|86-postAction
                 // write post-action user code here
                 int nIndex = getExpSumList().getSelectedIndex();
                 if (nIndex >= 0) {                // write pre-action user code here
@@ -341,37 +400,37 @@ private String URLEncode(String s)
                     String cols[] = split(currEntry, ":");
                     fillExpensesDetails(cols[0]);
                 }
-            } else if (command == detailsExpensesCommand) {//GEN-LINE:|7-commandAction|17|89-preAction
+            } else if (command == detailsExpensesCommand) {//GEN-LINE:|7-commandAction|21|89-preAction
                 int nIndex = getExpSumList().getSelectedIndex();
                 if (nIndex >= 0) {                // write pre-action user code here
-                    switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|18|89-postAction
+                    switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|22|89-postAction
                     // write post-action user code here
                     String currEntry = getExpSumList().getString(nIndex);
                     String cols[] = split(currEntry, ":");
                     fillExpensesDetails(cols[0]);
                 }
-            } else if (command == returnCommand) {//GEN-LINE:|7-commandAction|19|96-preAction
+            } else if (command == returnCommand) {//GEN-LINE:|7-commandAction|23|96-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|20|96-postAction
+                switchDisplayable(null, getForm());//GEN-LINE:|7-commandAction|24|96-postAction
                 // write post-action user code here
-            }//GEN-BEGIN:|7-commandAction|21|83-preAction
+            }//GEN-BEGIN:|7-commandAction|25|83-preAction
         } else if (displayable == form) {
-            if (command == aboutCommand) {//GEN-END:|7-commandAction|21|83-preAction
+            if (command == aboutCommand) {//GEN-END:|7-commandAction|25|83-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|22|83-postAction
+                switchDisplayable(null, getAbout());//GEN-LINE:|7-commandAction|26|83-postAction
                 // write post-action user code here
-            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|23|27-preAction
+            } else if (command == addExpenseCommand) {//GEN-LINE:|7-commandAction|27|27-preAction
                     // write pre-action user code here
-//GEN-LINE:|7-commandAction|24|27-postAction
+//GEN-LINE:|7-commandAction|28|27-postAction
                    addExpense();
-            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|25|149-preAction
+            } else if (command == checkUpdateCommand) {//GEN-LINE:|7-commandAction|29|149-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|26|149-postAction
+//GEN-LINE:|7-commandAction|30|149-postAction
                 // write post-action user code here
                 checkUpdate();
-            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|27|67-preAction
+            } else if (command == cleanExpensesCommand) {//GEN-LINE:|7-commandAction|31|67-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|28|67-postAction
+//GEN-LINE:|7-commandAction|32|67-postAction
                 // write post-action user code here
                 if (RecordStore.listRecordStores() != null) {
                     try {
@@ -382,7 +441,7 @@ private String URLEncode(String s)
                         showMsg("Can't delete the datastore","Error", AlertType.ERROR);
                     }
                 }
-            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|29|19-preAction
+            } else if (command == exitCommand) {//GEN-LINE:|7-commandAction|33|19-preAction
                 // write pre-action user code here
                 if(exceptions.isEmpty())
                 {
@@ -390,29 +449,34 @@ private String URLEncode(String s)
                 }
                 else
                 {
-                    switchDisplayable(null, getReportBugs());//GEN-LINE:|7-commandAction|30|19-postAction
+                    switchDisplayable(null, getReportBugs());//GEN-LINE:|7-commandAction|34|19-postAction
                     // write post-action user code here
                 }
-            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|31|113-preAction
+            } else if (command == expenseDetailsCommand) {//GEN-LINE:|7-commandAction|35|113-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|32|113-postAction
+                switchDisplayable(null, getDetailExpList());//GEN-LINE:|7-commandAction|36|113-postAction
                 // write post-action user code here
                 fillExpensesDetails("");
-            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|33|80-preAction
+            } else if (command == expensesummaryCommand) {//GEN-LINE:|7-commandAction|37|80-preAction
                 // write pre-action user code here
-                switchDisplayable(null, getExpSumList());//GEN-LINE:|7-commandAction|34|80-postAction
+                switchDisplayable(null, getExpSumForm());//GEN-LINE:|7-commandAction|38|80-postAction
                 // write post-action user code here
                 fillExpenseSummary();
-            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|35|75-preAction
+            } else if (command == exportExpensesCommand) {//GEN-LINE:|7-commandAction|39|75-preAction
                 // write pre-action user code here
-//GEN-LINE:|7-commandAction|36|75-postAction
+//GEN-LINE:|7-commandAction|40|75-postAction
                 // write post-action user code here
                 exportData("");
-            }//GEN-BEGIN:|7-commandAction|37|7-postCommandAction
-        }//GEN-END:|7-commandAction|37|7-postCommandAction
+            } else if (command == hideCommand) {//GEN-LINE:|7-commandAction|41|187-preAction
+                // write pre-action user code here
+//GEN-LINE:|7-commandAction|42|187-postAction
+                // write post-action user code here
+                switchDisplayable (null, null);
+            }//GEN-BEGIN:|7-commandAction|43|7-postCommandAction
+        }//GEN-END:|7-commandAction|43|7-postCommandAction
         // write post-action user code here
-    }//GEN-BEGIN:|7-commandAction|38|
-    //</editor-fold>//GEN-END:|7-commandAction|38|
+    }//GEN-BEGIN:|7-commandAction|44|
+    //</editor-fold>//GEN-END:|7-commandAction|44|
 
 
 
@@ -605,7 +669,7 @@ void reportBug(Exception e)
 public Command getExitCommand() {
     if (exitCommand == null) {//GEN-END:|18-getter|0|18-preInit
             // write pre-init user code here
-        exitCommand = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|18-getter|1|18-postInit
+        exitCommand = new Command("Exit", Command.SCREEN, 0);//GEN-LINE:|18-getter|1|18-postInit
             // write post-init user code here
     }//GEN-BEGIN:|18-getter|2|
     return exitCommand;
@@ -621,7 +685,6 @@ public Form getForm() {
     if (form == null) {//GEN-END:|14-getter|0|14-preInit
             // write pre-init user code here
         form = new Form("TrackExpense", new Item[] { getAmount(), getDetails(), getCatGroup(), getDateField(), getChoiceGroup1() });//GEN-BEGIN:|14-getter|1|14-postInit
-        form.addCommand(getExitCommand());
         form.addCommand(getAddExpenseCommand());
         form.addCommand(getExpenseDetailsCommand());
         form.addCommand(getExpensesummaryCommand());
@@ -629,6 +692,8 @@ public Form getForm() {
         form.addCommand(getExportExpensesCommand());
         form.addCommand(getCheckUpdateCommand());
         form.addCommand(getAboutCommand());
+        form.addCommand(getHideCommand());
+        form.addCommand(getExitCommand());
         form.setCommandListener(this);//GEN-END:|14-getter|1|14-postInit
             // write post-init user code here
             form.setItemStateListener(this);
@@ -795,7 +860,7 @@ public List getDetailExpList() {
         c.setTime(sD);
         String[] cols = split(str, "/");
         c.set(Calendar.DATE,Integer.parseInt(cols[0]));
-        c.set(Calendar.MONTH,Integer.parseInt(cols[1]));
+        c.set(Calendar.MONTH,Integer.parseInt(cols[1])-1);
         c.set(Calendar.YEAR,Integer.parseInt(cols[2]));
         Date finalD = c.getTime();
         return finalD;
@@ -809,7 +874,6 @@ public List getDetailExpList() {
         Date endDate = new Date();
         int totalExp = 0;
         try {
-            expSumList.deleteAll();
             if (null == rs) {
                 rs = RecordStore.openRecordStore("MyExpenses", true);
             }
@@ -836,43 +900,53 @@ public List getDetailExpList() {
                     catSum = new Integer(Integer.parseInt(cols[1]));
                 }
                 catExp.put(cols[3], catSum);
+                try {
+                    Date rowDate = parseDate(cols[0]);
+                    if (rowDate.getTime() > endDate.getTime()) {
+                        endDate = rowDate;
+                    }
+                    if (rowDate.getTime() < startDate.getTime()) {
+                        startDate = rowDate;
+                    }
+                } catch (Exception es) {
+                }
             }
             String[] keys = new String[catExp.size()];
             Enumeration en = catExp.keys();
-
             for(int keyCount = 0;en.hasMoreElements(); keyCount++)
             {
                 String key = (String)en.nextElement();
                 keys[keyCount] = key;
             }
             sort(keys);
+            String[][] values = new String[keys.length][2];
             for(int keyCount = 0;keyCount < keys.length; keyCount++)
             {
                 Integer sum = (Integer)catExp.get(keys[keyCount]);
                 totalExp += sum.intValue();
-                expSumList.append(keys[keyCount] + " : " + sum, null);
+                //expSumList.append(keys[keyCount] + " : " + sum, null);
+                values[keyCount][0] = keys[keyCount];
+                values[keyCount][1] = ""+sum;
             }
-//            try
-//            {
-//                Calendar c = Calendar.getInstance();
-//                c.setTime(startDate);
-//
-//                String startString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
-//
-//                c.setTime(endDate);
-//                String endString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
-//
-//                expSumList.insert(0,"[" + startString + "]-[" + endString + "]" , null);
-//                expSumList.insert(1,"---------", null);
-//            }
-//            catch(Exception e){}
-            expSumList.append("---------", null);
-            expSumList.append("Total : " + totalExp, null);
+            getSimpleTableModel().setValues(values);
+            getExpensesTableItem().setPreferredSize(this.getForm().getWidth(),
+                    (this.getSimpleTableModel().getRowCount()+2)*24 + 2);
+            try
+            {
+                totalExpenseTextField.setString(""+totalExp);
+                Calendar c = Calendar.getInstance();
+                c.setTime(startDate);
 
-        } catch (Exception e) {
-            reportBug(e);
-            //showMsg("Can't open datastore", "Error", AlertType.ERROR);
-        }
+                String startString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+
+                c.setTime(endDate);
+                String endString = c.get(Calendar.DAY_OF_MONTH) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.YEAR);
+
+                startDateTextField.setString(startString);
+                endDateTextField.setString(endString);
+            }
+            catch(Exception e){reportBug(e);}
+        } catch (Exception e) {reportBug(e);}
         if (null != rs) {
             try {
                 rs.closeRecordStore();
@@ -1669,6 +1743,171 @@ public List getDetailExpList() {
     }
     //</editor-fold>//GEN-END:|183-getter|3|
 
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand1 ">//GEN-BEGIN:|184-getter|0|184-preInit
+    /**
+     * Returns an initiliazed instance of exitCommand1 component.
+     * @return the initialized component instance
+     */
+    public Command getExitCommand1() {
+        if (exitCommand1 == null) {//GEN-END:|184-getter|0|184-preInit
+            // write pre-init user code here
+            exitCommand1 = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|184-getter|1|184-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|184-getter|2|
+        return exitCommand1;
+    }
+    //</editor-fold>//GEN-END:|184-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: hideCommand ">//GEN-BEGIN:|186-getter|0|186-preInit
+    /**
+     * Returns an initiliazed instance of hideCommand component.
+     * @return the initialized component instance
+     */
+    public Command getHideCommand() {
+        if (hideCommand == null) {//GEN-END:|186-getter|0|186-preInit
+            // write pre-init user code here
+            hideCommand = new Command("Hide", Command.EXIT, 0);//GEN-LINE:|186-getter|1|186-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|186-getter|2|
+        return hideCommand;
+    }
+    //</editor-fold>//GEN-END:|186-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: expSumForm ">//GEN-BEGIN:|190-getter|0|190-preInit
+    /**
+     * Returns an initiliazed instance of expSumForm component.
+     * @return the initialized component instance
+     */
+    public Form getExpSumForm() {
+        if (expSumForm == null) {//GEN-END:|190-getter|0|190-preInit
+            // write pre-init user code here
+            expSumForm = new Form("Expenses Summary", new Item[] { getStartDateTextField(), getEndDateTextField(), getExpensesTableItem(), getTotalExpenseTextField() });//GEN-BEGIN:|190-getter|1|190-postInit
+            expSumForm.addCommand(getReturnCommand());
+            expSumForm.addCommand(getDetailsExpensesCommand());
+            expSumForm.setCommandListener(this);//GEN-END:|190-getter|1|190-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|190-getter|2|
+        return expSumForm;
+    }
+    //</editor-fold>//GEN-END:|190-getter|2|
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: expensesTableItem ">//GEN-BEGIN:|193-getter|0|193-preInit
+    /**
+     * Returns an initiliazed instance of expensesTableItem component.
+     * @return the initialized component instance
+     */
+    public TableItem getExpensesTableItem() {
+        if (expensesTableItem == null) {//GEN-END:|193-getter|0|193-preInit
+            // write pre-init user code here
+            expensesTableItem = new TableItem(getDisplay(), "");//GEN-BEGIN:|193-getter|1|193-postInit
+            expensesTableItem.setPreferredSize(this.getForm().getWidth(), this.getSimpleTableModel().getRowCount()*23);
+            expensesTableItem.setLayout(ImageItem.LAYOUT_DEFAULT);
+            expensesTableItem.setTitle("Expenses");
+            expensesTableItem.setModel(getSimpleTableModel());//GEN-END:|193-getter|1|193-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|193-getter|2|
+        return expensesTableItem;
+    }
+    //</editor-fold>//GEN-END:|193-getter|2|
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: startDateTextField ">//GEN-BEGIN:|194-getter|0|194-preInit
+    /**
+     * Returns an initiliazed instance of startDateTextField component.
+     * @return the initialized component instance
+     */
+    public TextField getStartDateTextField() {
+        if (startDateTextField == null) {//GEN-END:|194-getter|0|194-preInit
+            // write pre-init user code here
+            startDateTextField = new TextField("Start Date", null, 32, TextField.ANY | TextField.UNEDITABLE);//GEN-LINE:|194-getter|1|194-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|194-getter|2|
+        return startDateTextField;
+    }
+    //</editor-fold>//GEN-END:|194-getter|2|
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: endDateTextField ">//GEN-BEGIN:|195-getter|0|195-preInit
+    /**
+     * Returns an initiliazed instance of endDateTextField component.
+     * @return the initialized component instance
+     */
+    public TextField getEndDateTextField() {
+        if (endDateTextField == null) {//GEN-END:|195-getter|0|195-preInit
+            // write pre-init user code here
+            endDateTextField = new TextField("End Date", null, 32, TextField.ANY | TextField.UNEDITABLE);//GEN-LINE:|195-getter|1|195-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|195-getter|2|
+        return endDateTextField;
+    }
+    //</editor-fold>//GEN-END:|195-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: simpleTableModel ">//GEN-BEGIN:|196-getter|0|196-preInit
+    /**
+     * Returns an initiliazed instance of simpleTableModel component.
+     * @return the initialized component instance
+     */
+    public SimpleTableModel getSimpleTableModel() {
+        if (simpleTableModel == null) {//GEN-END:|196-getter|0|196-preInit
+            // write pre-init user code here
+            simpleTableModel = new SimpleTableModel(new java.lang.String[][] {}, new java.lang.String[] { "Category", "Amount" });//GEN-LINE:|196-getter|1|196-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|196-getter|2|
+        return simpleTableModel;
+    }
+    //</editor-fold>//GEN-END:|196-getter|2|
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: totalExpenseTextField ">//GEN-BEGIN:|197-getter|0|197-preInit
+    /**
+     * Returns an initiliazed instance of totalExpenseTextField component.
+     * @return the initialized component instance
+     */
+    public TextField getTotalExpenseTextField() {
+        if (totalExpenseTextField == null) {//GEN-END:|197-getter|0|197-preInit
+            // write pre-init user code here
+            totalExpenseTextField = new TextField("Total Expense", null, 32, TextField.ANY | TextField.UNEDITABLE);//GEN-LINE:|197-getter|1|197-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|197-getter|2|
+        return totalExpenseTextField;
+    }
+    //</editor-fold>//GEN-END:|197-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand2 ">//GEN-BEGIN:|198-getter|0|198-preInit
+    /**
+     * Returns an initiliazed instance of exitCommand2 component.
+     * @return the initialized component instance
+     */
+    public Command getExitCommand2() {
+        if (exitCommand2 == null) {//GEN-END:|198-getter|0|198-preInit
+            // write pre-init user code here
+            exitCommand2 = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|198-getter|1|198-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|198-getter|2|
+        return exitCommand2;
+    }
+    //</editor-fold>//GEN-END:|198-getter|2|
+
+    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: backCommand1 ">//GEN-BEGIN:|201-getter|0|201-preInit
+    /**
+     * Returns an initiliazed instance of backCommand1 component.
+     * @return the initialized component instance
+     */
+    public Command getBackCommand1() {
+        if (backCommand1 == null) {//GEN-END:|201-getter|0|201-preInit
+            // write pre-init user code here
+            backCommand1 = new Command("Back", Command.BACK, 0);//GEN-LINE:|201-getter|1|201-postInit
+            // write post-init user code here
+        }//GEN-BEGIN:|201-getter|2|
+        return backCommand1;
+    }
+    //</editor-fold>//GEN-END:|201-getter|2|
+
+
+
+
+
 
 
 
@@ -1681,6 +1920,7 @@ public List getDetailExpList() {
      */
     public Display getDisplay () {
         return Display.getDisplay(this);
+        
     }
 
     /**
@@ -1702,6 +1942,10 @@ public List getDetailExpList() {
         } else {
             initialize ();
             startMIDlet ();
+
+fillDummyData();
+switchDisplayable(null, getExpSumForm());
+fillExpenseSummary();
         }
         midletPaused = false;
     }
