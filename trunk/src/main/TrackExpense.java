@@ -55,10 +55,7 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Command exitWOReportCommand;
     private Command checkUpdateCommand;
     private Command reportBugsCommand;
-    private Command exitCommand1;
     private Command hideCommand;
-    private Command exitCommand2;
-    private Command backCommand1;
     private Form form;
     private TextField amount;
     private TextField details;
@@ -71,10 +68,10 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Alert Delete;
     private Alert ReportBugs;
     private Form expSumForm;
-    private TableItem expensesTableItem;
-    private TextField startDateTextField;
-    private TextField endDateTextField;
     private TextField totalExpenseTextField;
+    private TableItem expensesTableItem;
+    private TextField endDateTextField;
+    private TextField startDateTextField;
     private Image image7;
     private Image image6;
     private Image image5;
@@ -93,8 +90,6 @@ public class TrackExpense extends MIDlet implements CommandListener,ItemStateLis
     private Image image15;
     private Image image14;
     private Image image17;
-    private Image image18;
-    private SimpleCancellableTask simpleCancellableTask;
     private SimpleTableModel simpleTableModel;
     //</editor-fold>//GEN-END:|fields|0|
 
@@ -199,37 +194,6 @@ private String URLEncode(String s)
      * The HelloMIDlet constructor.
      */
     public TrackExpense() {
-    }
-
-    private void fillDummyData()
-  {
-        try {
-            try {
-                RecordStore.deleteRecordStore("MyExpenses");
-            } catch (Exception e) {
-            }
-            RecordStore rs = RecordStore.openRecordStore("MyExpenses", true);
-            String rec = "";
-
-            rec = "12/11/2009^900^Amma burn^Medical";
-            rs.addRecord(rec.getBytes(), 0, rec.length());
-            rec = "13/11/2009^62^Pril etc.^Groceries";
-            rs.addRecord(rec.getBytes(), 0, rec.length());
-            rec = "13/11/2009^68^Vegetables^Groceries";
-            rs.addRecord(rec.getBytes(), 0, rec.length());
-            
-            rec = "16/11/2009^20^Banana^Vegetables";
-            rs.addRecord(rec.getBytes(), 0, rec.length());
-            rec = "17/11/2009^120^Amma dressing^Medical";
-            rs.addRecord(rec.getBytes(), 0, rec.length());
-            rec = "17/11/2009^300^Car, Kothanur^Petrol";
-            rs.addRecord(rec.getBytes(), 0, rec.length());
-
-            rs.addRecord(rec.getBytes(), 0, rec.length());
-            rec = "18/11/2009^115^Horticorp,Fruits^Vegetables";
-            rs.addRecord(rec.getBytes(), 0, rec.length());
-        } catch (Exception e) {
-        }
     }
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
@@ -1703,60 +1667,11 @@ public List getDetailExpList() {
 
 
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: image18 ">//GEN-BEGIN:|179-getter|0|179-preInit
-    /**
-     * Returns an initiliazed instance of image18 component.
-     * @return the initialized component instance
-     */
-    public Image getImage18() {
-        if (image18 == null) {//GEN-END:|179-getter|0|179-preInit
-            // write pre-init user code here
-            try {//GEN-BEGIN:|179-getter|1|179-@java.io.IOException
-                image18 = Image.createImage("/images/appicon.png");
-            } catch (java.io.IOException e) {//GEN-END:|179-getter|1|179-@java.io.IOException
-                e.printStackTrace();
-            }//GEN-LINE:|179-getter|2|179-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|179-getter|3|
-        return image18;
-    }
-    //</editor-fold>//GEN-END:|179-getter|3|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: simpleCancellableTask ">//GEN-BEGIN:|183-getter|0|183-preInit
-    /**
-     * Returns an initiliazed instance of simpleCancellableTask component.
-     * @return the initialized component instance
-     */
-    public SimpleCancellableTask getSimpleCancellableTask() {
-        if (simpleCancellableTask == null) {//GEN-END:|183-getter|0|183-preInit
-            // write pre-init user code here
-            simpleCancellableTask = new SimpleCancellableTask();//GEN-BEGIN:|183-getter|1|183-execute
-            simpleCancellableTask.setExecutable(new org.netbeans.microedition.util.Executable() {
-                public void execute() throws Exception {//GEN-END:|183-getter|1|183-execute
-                    // write task-execution user code here
-                    fillExpenseSummary();
-                }//GEN-BEGIN:|183-getter|2|183-postInit
-            });//GEN-END:|183-getter|2|183-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|183-getter|3|
-        return simpleCancellableTask;
-    }
-    //</editor-fold>//GEN-END:|183-getter|3|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand1 ">//GEN-BEGIN:|184-getter|0|184-preInit
-    /**
-     * Returns an initiliazed instance of exitCommand1 component.
-     * @return the initialized component instance
-     */
-    public Command getExitCommand1() {
-        if (exitCommand1 == null) {//GEN-END:|184-getter|0|184-preInit
-            // write pre-init user code here
-            exitCommand1 = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|184-getter|1|184-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|184-getter|2|
-        return exitCommand1;
-    }
-    //</editor-fold>//GEN-END:|184-getter|2|
+
+
+
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Getter: hideCommand ">//GEN-BEGIN:|186-getter|0|186-preInit
     /**
@@ -1874,35 +1789,9 @@ public List getDetailExpList() {
     }
     //</editor-fold>//GEN-END:|197-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: exitCommand2 ">//GEN-BEGIN:|198-getter|0|198-preInit
-    /**
-     * Returns an initiliazed instance of exitCommand2 component.
-     * @return the initialized component instance
-     */
-    public Command getExitCommand2() {
-        if (exitCommand2 == null) {//GEN-END:|198-getter|0|198-preInit
-            // write pre-init user code here
-            exitCommand2 = new Command("Exit", Command.EXIT, 0);//GEN-LINE:|198-getter|1|198-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|198-getter|2|
-        return exitCommand2;
-    }
-    //</editor-fold>//GEN-END:|198-getter|2|
 
-    //<editor-fold defaultstate="collapsed" desc=" Generated Getter: backCommand1 ">//GEN-BEGIN:|201-getter|0|201-preInit
-    /**
-     * Returns an initiliazed instance of backCommand1 component.
-     * @return the initialized component instance
-     */
-    public Command getBackCommand1() {
-        if (backCommand1 == null) {//GEN-END:|201-getter|0|201-preInit
-            // write pre-init user code here
-            backCommand1 = new Command("Back", Command.BACK, 0);//GEN-LINE:|201-getter|1|201-postInit
-            // write post-init user code here
-        }//GEN-BEGIN:|201-getter|2|
-        return backCommand1;
-    }
-    //</editor-fold>//GEN-END:|201-getter|2|
+
+
 
 
 
@@ -1942,10 +1831,6 @@ public List getDetailExpList() {
         } else {
             initialize ();
             startMIDlet ();
-
-fillDummyData();
-switchDisplayable(null, getExpSumForm());
-fillExpenseSummary();
         }
         midletPaused = false;
     }
