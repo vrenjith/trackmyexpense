@@ -142,25 +142,10 @@
                     <Property name="priority" typeID="Pint" value="V0"/>
                     <Property name="ordinary" typeID="Pboolean" value="Vfalse"/>
                 </Component>
-                <Component componentID="184" typeID="Cjavax.microedition.lcdui.Command">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VexitCommand1"/>
-                    <Property name="label" typeID="Pjava.lang.String" value="VExit"/>
-                    <Property name="type" typeID="Pint" value="V7"/>
-                </Component>
                 <Component componentID="186" typeID="Cjavax.microedition.lcdui.Command">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VhideCommand"/>
                     <Property name="label" typeID="Pjava.lang.String" value="VHide"/>
                     <Property name="type" typeID="Pint" value="V7"/>
-                </Component>
-                <Component componentID="198" typeID="Cjavax.microedition.lcdui.Command">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VexitCommand2"/>
-                    <Property name="label" typeID="Pjava.lang.String" value="VExit"/>
-                    <Property name="type" typeID="Pint" value="V7"/>
-                </Component>
-                <Component componentID="201" typeID="Cjavax.microedition.lcdui.Command">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VbackCommand1"/>
-                    <Property name="label" typeID="Pjava.lang.String" value="VBack"/>
-                    <Property name="type" typeID="Pint" value="V2"/>
                 </Component>
             </Component>
             <Component componentID="10" typeID="C#DisplayablesCategory">
@@ -472,37 +457,6 @@
                     <Property name="title" typeID="Pjava.lang.String" value="VExpenses Summary"/>
                     <Property name="commandListener" typeID="C#CommandListener" value="R7"/>
                     <Property name="items" typeID="1Cjavax.microedition.lcdui.Item" value="A4:4_R1944_R1954_R1934_R197"/>
-                    <Component componentID="193" typeID="Corg.netbeans.microedition.lcdui.TableItem">
-                        <Property name="instanceName" typeID="Pjava.lang.String" value="VexpensesTableItem"/>
-                        <Property name="label" typeID="Pjava.lang.String" value="V"/>
-                        <Property name="layout" typeID="Pint" value="V0"/>
-                        <Property name="preferredHeight" typeID="Pint" value="Uthis.getSimpleTableModel().getRowCount()*23"/>
-                        <Property name="preferredWidth" typeID="Pint" value="Uthis.getForm().getWidth()"/>
-                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
-                        <Property name="title" typeID="Pjava.lang.String" value="VExpenses"/>
-                        <Property name="model" typeID="Corg.netbeans.microedition.lcdui.TableModel" value="R196"/>
-                    </Component>
-                    <Component componentID="194" typeID="Cjavax.microedition.lcdui.TextField">
-                        <Property name="instanceName" typeID="Pjava.lang.String" value="VstartDateTextField"/>
-                        <Property name="label" typeID="Pjava.lang.String" value="VStart Date"/>
-                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
-                        <Property name="maxSize" typeID="Pint" value="V32"/>
-                        <Property name="constraints" typeID="Pint" value="V131072"/>
-                    </Component>
-                    <Component componentID="195" typeID="Cjavax.microedition.lcdui.TextField">
-                        <Property name="instanceName" typeID="Pjava.lang.String" value="VendDateTextField"/>
-                        <Property name="label" typeID="Pjava.lang.String" value="VEnd Date"/>
-                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
-                        <Property name="maxSize" typeID="Pint" value="V32"/>
-                        <Property name="constraints" typeID="Pint" value="V131072"/>
-                    </Component>
-                    <Component componentID="197" typeID="Cjavax.microedition.lcdui.TextField">
-                        <Property name="instanceName" typeID="Pjava.lang.String" value="VtotalExpenseTextField"/>
-                        <Property name="label" typeID="Pjava.lang.String" value="VTotal Expense"/>
-                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
-                        <Property name="maxSize" typeID="Pint" value="V32"/>
-                        <Property name="constraints" typeID="Pint" value="V131072"/>
-                    </Component>
                     <Component componentID="205" typeID="C#CommandEventSource">
                         <Property name="eventHandler" typeID="C#EventHandler" value="R206"/>
                         <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R190"/>
@@ -520,6 +474,37 @@
                             <Property name="eventSource" typeID="C#EventSource" value="R207"/>
                             <Property name="displayable" typeID="Cjavax.microedition.lcdui.Displayable" value="R56"/>
                         </Component>
+                    </Component>
+                    <Component componentID="197" typeID="Cjavax.microedition.lcdui.TextField">
+                        <Property name="instanceName" typeID="Pjava.lang.String" value="VtotalExpenseTextField"/>
+                        <Property name="label" typeID="Pjava.lang.String" value="VTotal Expense"/>
+                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
+                        <Property name="maxSize" typeID="Pint" value="V32"/>
+                        <Property name="constraints" typeID="Pint" value="V131072"/>
+                    </Component>
+                    <Component componentID="193" typeID="Corg.netbeans.microedition.lcdui.TableItem">
+                        <Property name="instanceName" typeID="Pjava.lang.String" value="VexpensesTableItem"/>
+                        <Property name="label" typeID="Pjava.lang.String" value="V"/>
+                        <Property name="layout" typeID="Pint" value="V0"/>
+                        <Property name="preferredHeight" typeID="Pint" value="Uthis.getSimpleTableModel().getRowCount()*23"/>
+                        <Property name="preferredWidth" typeID="Pint" value="Uthis.getForm().getWidth()"/>
+                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
+                        <Property name="title" typeID="Pjava.lang.String" value="VExpenses"/>
+                        <Property name="model" typeID="Corg.netbeans.microedition.lcdui.TableModel" value="R196"/>
+                    </Component>
+                    <Component componentID="195" typeID="Cjavax.microedition.lcdui.TextField">
+                        <Property name="instanceName" typeID="Pjava.lang.String" value="VendDateTextField"/>
+                        <Property name="label" typeID="Pjava.lang.String" value="VEnd Date"/>
+                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
+                        <Property name="maxSize" typeID="Pint" value="V32"/>
+                        <Property name="constraints" typeID="Pint" value="V131072"/>
+                    </Component>
+                    <Component componentID="194" typeID="Cjavax.microedition.lcdui.TextField">
+                        <Property name="instanceName" typeID="Pjava.lang.String" value="VstartDateTextField"/>
+                        <Property name="label" typeID="Pjava.lang.String" value="VStart Date"/>
+                        <Property name="itemCommandListener" typeID="C#ItemCommandListener" value="R17"/>
+                        <Property name="maxSize" typeID="Pint" value="V32"/>
+                        <Property name="constraints" typeID="Pint" value="V131072"/>
                     </Component>
                 </Component>
             </Component>
@@ -596,13 +581,6 @@
                     <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage17"/>
                     <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/bug.png"/>
                 </Component>
-                <Component componentID="179" typeID="Cjavax.microedition.lcdui.Image">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="Vimage18"/>
-                    <Property name="resourcePath" typeID="Pjava.lang.String" value="V/images/appicon.png"/>
-                </Component>
-                <Component componentID="183" typeID="Corg.netbeans.microedition.util.SimpleCancellableTask">
-                    <Property name="instanceName" typeID="Pjava.lang.String" value="VsimpleCancellableTask"/>
-                </Component>
                 <Component componentID="196" typeID="Corg.netbeans.microedition.lcdui.SimpleTableModel">
                     <Property name="instanceName" typeID="Pjava.lang.String" value="VsimpleTableModel"/>
                     <Property name="values" typeID="2Pjava.lang.String" value="A0:"/>
@@ -613,13 +591,13 @@
         </Component>
     </Document>
     <FlowScene version="1">
-        <Node componentID="91" descriptorID="componentNode91" x="527" y="456"/>
-        <Node componentID="136" descriptorID="componentNode136" x="982" y="456"/>
-        <Node componentID="190" descriptorID="componentNode190" x="39" y="274"/>
-        <Node componentID="14" descriptorID="componentNode14" x="277" y="181"/>
-        <Node componentID="2" descriptorID="componentNode2" x="34" y="32"/>
-        <Node componentID="56" descriptorID="componentNode56" x="753" y="181"/>
-        <Node componentID="85" descriptorID="componentNode85" x="34" y="456"/>
         <Node componentID="150" descriptorID="componentNode150" x="527" y="32"/>
+        <Node componentID="136" descriptorID="componentNode136" x="982" y="456"/>
+        <Node componentID="2" descriptorID="componentNode2" x="34" y="32"/>
+        <Node componentID="14" descriptorID="componentNode14" x="277" y="181"/>
+        <Node componentID="85" descriptorID="componentNode85" x="34" y="456"/>
+        <Node componentID="190" descriptorID="componentNode190" x="39" y="274"/>
+        <Node componentID="56" descriptorID="componentNode56" x="753" y="181"/>
+        <Node componentID="91" descriptorID="componentNode91" x="527" y="456"/>
     </FlowScene>
 </VisualDesign>
