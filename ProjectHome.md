@@ -1,0 +1,1 @@
+For tracking personal expenses the easiest solution is to have an application for it in your mobile phone. The aim of this project is the just the same.

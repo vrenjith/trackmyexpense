@@ -1,0 +1,1 @@
+The application supports automatic updates directly within the application.

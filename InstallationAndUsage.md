@@ -1,0 +1,1 @@
+Download the application from [here](http://code.google.com/p/trackmyexpense/source/browse/#svn%2Ftrunk%2Fdistribution%2FS60Emulator)
